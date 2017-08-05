@@ -1,3 +1,4 @@
+
 (namespace repl)
 
 (include "kit/header")
@@ -17,7 +18,7 @@
 
 (pipe program
       (.version "0.0.0")
-      (.option "-p, --port" "port to connect on" parse-int 8199)
+      (.option "-p, --port" "port to connect on" 8199)
       (.parse process.argv))
 
 (const (lit port) program)
@@ -95,4 +96,3 @@ js from sibilant and evaluated in the context given"
 
 (.on (.open (.spawn Repl-server) **port**) 'open
      (aprint "listening"))
-
