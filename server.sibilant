@@ -1,0 +1,82 @@
+(namespace repl)
+
+(include "kit/header")
+
+(import-namespace kit)
+
+(include "./interface/index.sibilant")
+
+(import-namespace interface)
+
+(require! 'child_process 'repl 'fs 'sibilant 'net 'events 'vm
+          hook "./hook.js")
+
+(.include sibilant "kit/header")
+
+(var log-file (fs.create-write-stream "./log"))
+
+(var time (lit (formatted (=> (d) ("" (Date.now) (.to-string d))))))
+
+(def run-in (context string )
+  (print "js" string)
+  (.run-in-context vm  string context))
+
+(def-curried bind-eval (context data)
+  (run-in context (get (sibilant (.to-string data)) 'js )))
+
+(def create-server (*context)
+  (.create-server net (bind-socket (create-context *context))))
+
+(def-curried write (data stream)
+  "curried invocation of the write method of a stream."
+  (.write stream data))
+
+(def-curried log  (socket data)
+  "bi-plexed log, which will be written to both the socket and to a log file"
+  (print "logging")
+  (.for-each [log-file socket] (write (time.formatted data))))
+;; (def Hook ( method-name f obj)
+;;   (let ((method (get obj method-name)))
+;;     (if (not (function? method))
+;;         (throw (new Type-error ("" method " is not a function")))))
+;;   )
+
+(var stdout process.stdout)
+(hook stdout)
+
+(def-curried bind-socket  (context  socket)
+  "Binds a socket to a context, causing all data from the socket to be parsed to
+js from sibilant and evaluated in the context given"
+  (.on socket 'data (bind-eval context))
+  (.hook stdout 'write (log socket)))
+
+(def create-context (*context)
+  (.create-context vm (mixin [*context (lit require sibilant)])))
+
+(def-interface Event-emitter ()
+  (doc ("a simple wrapper around the " `event " modules  type" 'Event-emitter))
+
+  (extend events.Event-emitter.prototype)
+
+  (init (.call events.Event-emitter this)))
+
+(def-interface Repl-server
+    ((*context global)
+     (tcp-server (create-server *context)))
+  (extend Event-emitter)
+
+  (def spawn (context) ((create this) context))
+
+  (def despawn ())
+
+  (def-generic open (port tcp-server)
+    (.listen tcp-server
+             (lit port)
+             (-> (.emit this 'open))) this)
+
+  (def-generic close (tcp-server)
+    (.close tcp-server (-> (.emit this 'close)))))
+
+(.on (.open (.spawn Repl-server) 8199) 'open
+     (aprint "listening"))
+
