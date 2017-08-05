@@ -33,7 +33,6 @@
 
 (def-curried log  (socket data)
   "bi-plexed log, which will be written to both the socket and to a log file"
-  (print "logging")
   (.for-each [log-file socket] (write (time.formatted data))))
 ;; (def Hook ( method-name f obj)
 ;;   (let ((method (get obj method-name)))
