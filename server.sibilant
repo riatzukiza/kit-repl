@@ -15,39 +15,51 @@
 
 (var log-file (fs.create-write-stream "./log"))
 
-(var time (lit (formatted (=> (d) ("[" (Date.now) "]:" (.to-string d))))))
+(var time (lit (formatted (=> (d) ("[" (new Date) "]:" (.to-string d))))))
+
+(var log-streams (new Set [log-file]))
+
+(var stdout process.stdout)
+(hook stdout)
+
+(def server-log ((dots args))
+
+  (.unhook stdout 'write)
+  (print (dots args))
+  (.hook stdout 'write log))
+
+(def-curried write (data stream)
+  "curried invocation of the write method of a stream."
+  (server-log 'writing data 'to stream)
+  (.write stream data)
+  )
+
+(def log  ( data)
+  "multiplexed log which which will write data to every client stream"
+  (server-log "logging to shells" data)
+  (.for-each  log-streams (write (time.formatted data))))
+
+(.hook stdout 'write log)
 
 (def run-in (context string )
   (print "js" string)
   (.run-in-context vm  string context))
 
 (def-curried bind-eval (context data)
-  (run-in context (get (sibilant (.to-string data)) 'js )))
+  (print 'result
+         (try (run-in context (get (sibilant (.to-string data)) 'js ))
+              e)))
 
 (def create-server (*context)
   (.create-server net (bind-socket (create-context *context))))
 
-(def-curried write (data stream)
-  "curried invocation of the write method of a stream."
-  (.write stream data))
-
-(def-curried log  (socket data)
-  "bi-plexed log, which will be written to both the socket and to a log file"
-  (.for-each [log-file socket] (write (time.formatted data))))
-;; (def Hook ( method-name f obj)
-;;   (let ((method (get obj method-name)))
-;;     (if (not (function? method))
-;;         (throw (new Type-error ("" method " is not a function")))))
-;;   )
-
-(var stdout process.stdout)
-(hook stdout)
-
 (def-curried bind-socket  (context  socket)
   "Binds a socket to a context, causing all data from the socket to be parsed to
 js from sibilant and evaluated in the context given"
-  (.on socket 'data (bind-eval context))
-  (.hook stdout 'write (log socket)))
+  (pipe socket
+        (.on  'data (bind-eval context))
+        (.on 'close (-> (.delete log-streams socket))))
+  (.add log-streams socket))
 
 (def create-context (*context)
   (.create-context vm (mixin [*context (lit require sibilant)])))
@@ -58,6 +70,8 @@ js from sibilant and evaluated in the context given"
   (extend events.Event-emitter.prototype)
 
   (init (.call events.Event-emitter this)))
+(macro fluently (...body)
+       `(scoped ...@body this))
 
 (def-interface Repl-server
     ((*context global)
@@ -69,12 +83,12 @@ js from sibilant and evaluated in the context given"
   (def despawn ())
 
   (def-generic open (port tcp-server)
-    (.listen tcp-server
-             (lit port)
-             (-> (.emit this 'open))) this)
+    (fluently (.listen tcp-server
+                       (lit port)
+                       (-> (.emit this 'open)))) )
 
   (def-generic close (tcp-server)
-    (.close tcp-server (-> (.emit this 'close)))))
+    (fluently (.close tcp-server (-> (.emit this 'close))))))
 
 (.on (.open (.spawn Repl-server) 8199) 'open
      (aprint "listening"))

@@ -31,4 +31,5 @@
         (.on 'close attempt-reconnect)
         (.on 'error (=> (e) (.log console e.message)))))
 
+(export manage)
 (manage *socket)
