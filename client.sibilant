@@ -12,24 +12,50 @@
 (const **port** 8199)
 (const **reattempt-interval** (seconds 5))
 
-(var *socket (.connect net **port**)
-     options (lit (input process.stdin) (output process.stdout))
-     rl (.create-interface readline options))
+(var log-reply (=> (d) (print "reply" (.to-string d)))
+     log-error (=> (e) (.log console e.message)))
 
-(.on  rl 'line (#-> ((aprint "request")) *socket.write))
-(.on *socket 'data (=> (d) (print "reply" (.to-string d))))
+(def-interface Client
+    (port
+     host
+     input
+     output
+     (retry-interval (seconds 5))
 
-(def reconnect ()
-  (set-timeout
-   (-> (assign *socket (manage (.connect net **port**))))
-   **reattempt-interval**))
+     (rl (.create-interface readline (lit input output))))
 
-(def manage (socket)
-  (var attempt-reconnect (-> (print "connection closed,attempting to reconnect") (reconnect socket)))
-  (pipe socket
-        (.on  'connect (-> (print 'connected)))
-        (.on 'close attempt-reconnect)
-        (.on 'error (=> (e) (.log console e.message)))))
+  (def spawn ( (lit port host
 
-(export manage)
-(manage *socket)
+                    retry-interval
+
+                    input output))
+    ((create Client)
+
+     port host
+     input output
+
+     retry-interval
+
+     ))
+
+  (def-generic *reconnect (retry-interval)
+    (set-timeout (-> (.connect this)) retry-interval))
+
+  (def-generic connect (port rl)
+    (.on  rl 'line (fpipe ((aprint "request")) this.*socket.write))
+    (assign this.*socket
+            (pipe (.connect net port)
+                  (.on  'data log-reply)
+                  (.on  'connect (-> (print 'connected)))
+                  (.on 'close (-> (print "connection closed,attempting to reconnect")
+                                  (.*reconnect this )))
+                  (.on 'error log-error))))) 
+
+
+
+
+(.connect
+ (.spawn Client
+         (lit (port 8199)
+              (input process.stdin)
+              (output process.stdout))))

@@ -30,7 +30,6 @@
 
 (def-curried write (data stream)
   "curried invocation of the write method of a stream."
-  (server-log 'writing data 'to stream)
   (.write stream data)
   )
 
@@ -39,7 +38,6 @@
   (server-log "logging to shells" data)
   (.for-each  log-streams (write (time.formatted data))))
 
-(.hook stdout 'write log)
 
 (def run-in (context string )
   (print "js" string)
@@ -91,5 +89,7 @@ js from sibilant and evaluated in the context given"
     (fluently (.close tcp-server (-> (.emit this 'close))))))
 
 (.on (.open (.spawn Repl-server) 8199) 'open
-     (aprint "listening"))
+     (-> (print "listening")
+         (.hook stdout 'write log)
+         ))
 
