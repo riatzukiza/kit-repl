@@ -1,42 +1,34 @@
 (namespace repl)
 
 (include "kit/header")
-
 (import-namespace kit)
+
 
 (include "./interface/index.sibilant")
 
 (import-namespace interface)
 
+(include "./macros")
+(import-namespace repl)
+
 (require! 'child_process 'repl 'fs 'sibilant 'net 'events 'vm
-          hook "./hook.js")
+          )
 
 (.include sibilant "kit/header")
 
 (var log-file (fs.create-write-stream "./log"))
 
-(var time (lit (formatted (=> (d) ("[" (new Date) "]:" (.to-string d))))))
 
 (var log-streams (new Set [log-file]))
 
 (var stdout process.stdout)
-(hook stdout)
 
-(def server-log ((dots args))
 
-  (.unhook stdout 'write)
-  (print (dots args))
-  (.hook stdout 'write log))
 
-(def-curried write (data stream)
-  "curried invocation of the write method of a stream."
-  (.write stream data)
-  )
+(export log-streams)
 
-(def log  ( data)
-  "multiplexed log which which will write data to every client stream"
-  (server-log "logging to shells" data)
-  (.for-each  log-streams (write (time.formatted data))))
+
+
 
 
 (def run-in (context string )
@@ -68,12 +60,12 @@ js from sibilant and evaluated in the context given"
   (extend events.Event-emitter.prototype)
 
   (init (.call events.Event-emitter this)))
-(macro fluently (...body)
-       `(scoped ...@body this))
 
-(def-interface Repl-server
+
+(def-interface Server
     ((*context global)
      (tcp-server (create-server *context)))
+
   (extend Event-emitter)
 
   (def spawn (context) ((create this) context))
@@ -88,8 +80,5 @@ js from sibilant and evaluated in the context given"
   (def-generic close (tcp-server)
     (fluently (.close tcp-server (-> (.emit this 'close))))))
 
-(.on (.open (.spawn Repl-server) 8199) 'open
-     (-> (print "listening")
-         (.hook stdout 'write log)
-         ))
+(export Server)
 

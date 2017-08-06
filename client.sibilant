@@ -4,8 +4,11 @@
 
 (include "./interface/index.sibilant")
 (import-namespace interface)
+
 (require! 'readline
           'net)
+
+(include "./macros")
 
 (def seconds (n) (* n 1000))
 
@@ -42,20 +45,12 @@
     (set-timeout (-> (.connect this)) retry-interval))
 
   (def-generic connect (port rl)
-    (.on  rl 'line (fpipe ((aprint "request")) this.*socket.write))
-    (assign this.*socket
-            (pipe (.connect net port)
-                  (.on  'data log-reply)
-                  (.on  'connect (-> (print 'connected)))
-                  (.on 'close (-> (print "connection closed,attempting to reconnect")
-                                  (.*reconnect this )))
-                  (.on 'error log-error))))) 
-
-
-
-
-(.connect
- (.spawn Client
-         (lit (port 8199)
-              (input process.stdin)
-              (output process.stdout))))
+    (fluently (.on  rl 'line (fpipe ((aprint "request")) this.*socket.write))
+              (assign this.*socket
+                      (pipe (.connect net port)
+                            (.on  'data log-reply)
+                            (.on  'connect (-> (print 'connected)))
+                            (.on 'close (-> (print "connection closed,attempting to reconnect")
+                                            (.*reconnect this )))
+                            (.on 'error log-error))))))
+(export Client)
