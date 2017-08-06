@@ -1,0 +1,14 @@
+{"name": "kit-repl",
+ "version": "0.0.2",
+ "description": "A networked repl for an extension of sibilant I call kit.",
+ "main": "index.js",
+ "dependencies": {"kit": "^1.0.0"},
+ "devDependencies": {},
+ "scripts": {"test": "sibilant -x cli.sibilant"},
+ "repository":
+ {"type": "git",
+  "url": "git+ssh://git@bitbucket.org/aaron_beavers/kit-repl.git"},
+ "keywords": ["cli", "sibilant", "lisp"],
+ "author": "Aaron Beavers",
+ "license": "ISC",
+ "homepage": "https://bitbucket.org/aaron_beavers/kit-repl#readme"}

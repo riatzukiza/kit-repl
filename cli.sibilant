@@ -11,24 +11,24 @@
 
 (var (lit stdout stdin) process)
 
-(var time (lit (formatted (=> (d) ("[" (new Date) "]:" (.to-string d))))))
+;; (var time (lit (formatted (=> (d) ("[" (new Date) "]:" (.to-string d))))))
 
-(def-curried write (data stream)
-  "curried invocation of the write method of a stream."
-  (.write stream data))
+;; (def-curried write (data stream)
+;;   "curried invocation of the write method of a stream."
+;;   (.write stream data))
 
-(def server-log ((dots args))
+;; (def server-log ((dots args))
 
-  (.unhook stdout 'write)
-  (print (dots args))
-  (.hook stdout 'write log))
+;;   (.unhook stdout 'write)
+;;   (print (dots args))
+;;   (.hook stdout 'write log))
 
-(def log  ( data)
-  "multiplexed log which which will write data to every client stream"
-  (server-log "logging to shells" data)
-  (.for-each  log-streams (write (time.formatted data))))
+;; (def log  ( data)
+;;   "multiplexed log which which will write data to every client stream"
+;;   (server-log "logging to shells" data)
+;;   (.for-each  log-streams (write (time.formatted data))))
 
-(hook stdout)
+;; (hook stdout)
 
 (var client (.connect
              (.spawn Client
