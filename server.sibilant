@@ -15,7 +15,7 @@
 
 (var log-file (fs.create-write-stream "./log"))
 
-(var time (lit (formatted (=> (d) ("" (Date.now) (.to-string d))))))
+(var time (lit (formatted (=> (d) ("[" (Date.now) "]:" (.to-string d))))))
 
 (def run-in (context string )
   (print "js" string)
