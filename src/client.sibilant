@@ -1,0 +1,20 @@
+
+(namespace repl)
+(include "kit/header")
+(import-namespace kit)
+
+(include "./interface/index.sibilant")
+(import-namespace interface)
+(require! 'readline 'net)
+
+(var attempt-reconnect
+     )
+
+
+
+
+
+
+
+
+(manage *socket)
