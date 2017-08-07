@@ -4,14 +4,9 @@
 
 (include "./interface/index.sibilant")
 (import-namespace interface)
-<<<<<<< HEAD
 
 (require! 'readline
           'net)
-=======
-(require! 'readline 'net
-          program 'commander)
->>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114
 
 (include "./macros")
 
@@ -32,51 +27,18 @@
 
                     retry-interval
 
-<<<<<<< HEAD
                     input output))
     ((create Client)
 
      port host
      input output
-=======
-(pipe program
-      (.version "0.0.0")
-      (.option "-p, --port" "port to connect on" parse-int 8199)
-      (.option "-h, --host" "hostname of evaluation server" "localhost")
-      (.option "-t, --retry-interval" (#-> parseInt seconds) 5)
-      (.parse process.argv))
-
-
-(const (lit port host retry-interval) program)
-
-(const **port** port)
-(const **reattempt-interval** retry-interval)
-(const **host** host)
-
-(var *socket (.connect net **port** **host**)
-     options (lit (input process.stdin) (output process.stdout))
-     rl (.create-interface readline options))
->>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114
 
      retry-interval
 
      ))
 
-<<<<<<< HEAD
   (def-generic *reconnect (retry-interval)
     (set-timeout (-> (.connect this)) retry-interval))
-=======
-(def manage (socket)
-
-  (var attempt-reconnect
-       (-> (print "connection closed,attempting to reconnect")
-           (reconnect socket)))
-
-  (pipe socket
-        (.on  'connect (-> (print 'connected)))
-        (.on 'close attempt-reconnect)
-        (.on 'error (=> (e) (.log console e.message)))))
->>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114
 
   (def-generic connect (port rl)
     (fluently (.on  rl 'line (fpipe ((aprint "request")) this.*socket.write))
