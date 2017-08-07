@@ -1,0 +1,46 @@
+(namespace repl)
+(include "kit/header")
+(import-namespace kit)
+
+(include "../interface/index")
+(import-namespace interface)
+
+(require! 'readline 'net (lit Event-emitter) "../event-emitter")
+
+(const [**not-connected** **connecting** **connected** ] [0 1 2])
+
+(def-interface Client
+    (port
+     host
+     retry-interval
+     options
+     (rl (.create-interface readline options)))
+
+  (options (lit (input process.stdin) (output process.stdout)))
+  (init
+   (.on  rl 'line (fpipe (tap (this.emit 'line)) *socket.write))
+
+   (.on *socket 'data (=> (d) (print "reply" (.to-string d)))))
+
+  (def-generic *reconnect (retry-interval)
+    (wait retry-interval (.connect this ) ))
+
+  (state **not-connected**)
+  (gett connected (= this.state **connected**))
+  (gett connecting (= this.state **connecting**))
+
+  (def-generic connect ( port host )
+    (fluently
+     (unless (or this.connected this.connecting)
+       (set this
+            'state **connecting**
+            '*socket (pipe (.connect net port host)
+                           (.once 'connect
+                                  (-> (assign this.state **connected**)
+                                      (print 'connected)))
+                           (.once 'close
+                                  (-> (assign this.state **not-connected**)
+                                      (.*reconnect this)))
+                           (.once 'error (aprint "ERROR::"))))))))
+
+(export Client)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {"name": "kit-repl",
  "version": "0.0.2",
  "description": "A networked repl for an extension of sibilant I call kit.",
@@ -12,3 +13,8 @@
  "author": "Aaron Beavers",
  "license": "ISC",
  "homepage": "https://bitbucket.org/aaron_beavers/kit-repl#readme"}
+=======
+{"name":"kit-repl",
+ "version":"0.0.0",
+ "dependencies":{"commander":"*"}}
+>>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114

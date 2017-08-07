@@ -1,30 +1,24 @@
+
 (namespace repl)
 
 (include "kit/header")
-(import-namespace kit)
 
+(import-namespace kit)
 
 (include "./interface/index.sibilant")
 
 (import-namespace interface)
 
-(include "./macros")
-(import-namespace repl)
-
 (require! 'child_process 'repl 'fs 'sibilant 'net 'events 'vm
-<<<<<<< HEAD
-          )
-=======
           'util
 
           program 'commander
           hook "./hook.js")
->>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114
 
 
 (pipe program
       (.version "0.0.0")
-      (.option "-p, --port" "port to connect on" parse-int 8199)
+      (.option "-p, --port" "port to connect on" 8199)
       (.parse process.argv))
 
 (const (lit port) program)
@@ -34,43 +28,17 @@
 
 (var log-file (fs.create-write-stream "./log"))
 
-<<<<<<< HEAD
-
-(var log-streams (new Set [log-file]))
-
-(var stdout process.stdout)
-
-
-
-(export log-streams)
-
-
-
-
-=======
 (var time (lit (formatted (=> (d) ("[" (Date.now) "]:" (.to-string d))))))
->>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114
 
 (def run-in (context string )
   (.run-in-context vm  string context))
 
 (def-curried bind-eval (context data)
-  (print 'result
-         (try (run-in context (get (sibilant (.to-string data)) 'js ))
-              e)))
+  (run-in context (get (sibilant (.to-string data)) 'js )))
 
 (def create-server (*context)
   (.create-server net (bind-socket (create-context *context))))
 
-<<<<<<< HEAD
-(def-curried bind-socket  (context  socket)
-  "Binds a socket to a context, causing all data from the socket to be parsed to
-js from sibilant and evaluated in the context given"
-  (pipe socket
-        (.on  'data (bind-eval context))
-        (.on 'close (-> (.delete log-streams socket))))
-  (.add log-streams socket))
-=======
 (def-curried fwrite (data stream)
   "curried invocation of the write method of a stream."
   (.write stream data))
@@ -97,7 +65,6 @@ js from sibilant and evaluated in the context given"
   (.hook stdout 'write
          (lambda (s encoding fd write)
            (log socket s write))))
->>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114
 
 (def create-context (*context)
   (.create-context vm (mixin [*context (lit require sibilant)])))
@@ -109,10 +76,9 @@ js from sibilant and evaluated in the context given"
 
   (init (.call events.Event-emitter this)))
 
-(def-interface Server
+(def-interface Repl-server
     ((*context global)
      (tcp-server (create-server *context)))
-
   (extend Event-emitter)
 
   (def spawn (context) ((create this) context))
@@ -120,16 +86,13 @@ js from sibilant and evaluated in the context given"
   (def despawn ())
 
   (def-generic open (port tcp-server)
-    (fluently (.listen tcp-server (lit port) (-> (.emit this 'open)))) )
+    (.listen tcp-server
+             (lit port)
+             (-> (.emit this 'open))) this)
 
   (def-generic close (tcp-server)
-    (fluently (.close tcp-server (-> (.emit this 'close))))))
+    (.close tcp-server (-> (.emit this 'close)))))
 
-<<<<<<< HEAD
-(export Server)
-=======
 
 (.on (.open (.spawn Repl-server) **port**) 'open
      (aprint "listening"))
->>>>>>> 49d0f4b8920314d2668f1acba899e9d53c418114
-

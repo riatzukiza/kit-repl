@@ -1,0 +1,13 @@
+
+(include "../interface/index.sibilant")
+(require 'events)
+
+(import-namespace interface)
+
+(def-interface Event-emitter ()
+  (doc ("a simple wrapper around the " `event " modules  type" 'Event-emitter))
+
+  (extend events.Event-emitter.prototype)
+
+  (init (.call events.Event-emitter this)))
+(export Event-emitter)
