@@ -61,7 +61,6 @@ js from sibilant and evaluated in the context given"
 
   (init (.call events.Event-emitter this)))
 
-
 (def-interface Server
     ((*context global)
      (tcp-server (create-server *context)))
@@ -73,9 +72,7 @@ js from sibilant and evaluated in the context given"
   (def despawn ())
 
   (def-generic open (port tcp-server)
-    (fluently (.listen tcp-server
-                       (lit port)
-                       (-> (.emit this 'open)))) )
+    (fluently (.listen tcp-server (lit port) (-> (.emit this 'open)))) )
 
   (def-generic close (tcp-server)
     (fluently (.close tcp-server (-> (.emit this 'close))))))

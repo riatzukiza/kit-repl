@@ -11,12 +11,8 @@
 (include "./macros")
 
 (def seconds (n) (* n 1000))
-
-(const **port** 8199)
-(const **reattempt-interval** (seconds 5))
-
-(var log-reply (=> (d) (print "reply" (.to-string d)))
-     log-error (=> (e) (.log console e.message)))
+(var log-reply (=> (d) (print "lisp" (.to-string d)))
+     log-error (=> (e) (.error console e.message)))
 
 (def-interface Client
     (port

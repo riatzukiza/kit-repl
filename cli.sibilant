@@ -29,16 +29,11 @@
 ;;   (.for-each  log-streams (write (time.formatted data))))
 
 ;; (hook stdout)
+(var context (mixin global (lit require stdout stdin Server Client log-streams hook)))
 
-(var client (.connect
-             (.spawn Client
-                     (lit (port 8199)
-                          (input stdin)
-                          (output stdout))))
-     server (.on (.open (.spawn Server) 8199) 'open
-                 (-> (print "listening")
-                     ;;(.hook stdout 'write log)
-                     ))
-     )
+(assign context.context context)
+
+(var client (.connect (.spawn Client (lit (port 8199) context (input stdin) (output stdout))))
+     server (.on (.open (.spawn Server) 8199) 'open (-> (print "listening"))))
 
 
