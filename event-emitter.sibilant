@@ -2,7 +2,7 @@
 (import-namespace kit)
 
 
-(include "../interface/index.sibilant")
+(include "./interface/index.sibilant")
 
 (import-namespace interface)
 

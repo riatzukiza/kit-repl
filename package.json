@@ -4,7 +4,7 @@
  "main": "index.js",
  "dependencies": {"kit": "^1.0.0"},
  "devDependencies": {},
- "scripts": {"test": "sibilant -x cli.sibilant"},
+ "scripts": {"local": "sibilant -x cli.sibilant"},
  "repository":
  {"type": "git",
   "url": "git+ssh://git@bitbucket.org/aaron_beavers/kit-repl.git"},

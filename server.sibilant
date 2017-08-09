@@ -11,7 +11,8 @@
 (include "./macros")
 (import-namespace repl)
 
-(require! 'child_process 'repl 'fs 'sibilant 'net 'events 'vm)
+(require! 'child_process 'repl 'fs 'sibilant 'net  'vm
+          (lit Event-emitter) "./event-emitter")
 
 
 (.include sibilant "kit/header")
@@ -47,12 +48,6 @@ js from sibilant and evaluated in the context given"
 (def create-context (*context)
   (.create-context vm (mixin [*context (lit require sibilant)])))
 
-(def-interface Event-emitter ()
-  (doc ("a simple wrapper around the " `event " modules  type" 'Event-emitter))
-
-  (extend events.Event-emitter.prototype)
-
-  (init (.call events.Event-emitter this)))
 
 (def-interface Server
     ((*context global)
@@ -64,8 +59,14 @@ js from sibilant and evaluated in the context given"
 
   (def despawn ())
 
-  (def-generic open (port tcp-server)
-    (fluently (.listen tcp-server (lit port) (-> (.emit this 'open)))) )
+  (def-generic open (port on-open tcp-server)
+    (fluently
+
+     (when (function? on-open)
+       (.on this 'open on-open))
+
+     (.listen tcp-server (lit port)
+                       (-> (.emit this 'open)))) )
 
   (def-generic close (tcp-server)
     (fluently (.close tcp-server (-> (.emit this 'close))))))

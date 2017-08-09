@@ -11,29 +11,42 @@
 
 (var (lit stdout stdin) process)
 
-;; (var time (lit (formatted (=> (d) ("[" (new Date) "]:" (.to-string d))))))
+(var time (lit (formatted (=> (d) ("[" (new Date) "]:" (.to-string d))))))
 
-;; (def-curried write (data stream)
-;;   "curried invocation of the write method of a stream."
-;;   (.write stream data))
+(def-curried write (data stream)
+  "curried invocation of the write method of a stream."
+  (.write stream data))
 
-;; (def server-log ((dots args))
+(def server-log ((dots args))
 
-;;   (.unhook stdout 'write)
-;;   (print (dots args))
-;;   (.hook stdout 'write log))
+  (.unhook stdout 'write)
+  (print (dots args))
+  (.hook stdout 'write log))
 
-;; (def log  ( data)
-;;   "multiplexed log which which will write data to every client stream"
-;;   (server-log "logging to shells" data)
-;;   (.for-each  log-streams (write (time.formatted data))))
+(def log  ( data)
+  "multiplexed log which which will write data to every client stream"
+  (server-log "logging to shells" data)
+  (.for-each  log-streams (write (time.formatted data))))
 
-;; (hook stdout)
-(var context (mixin global (lit require stdout stdin Server Client log-streams hook)))
+(hook stdout)
+
+(var context
+     (mixin global
+            (lit Server Client
+                 (sibilant (require 'sibilant))
+                 require
+                 stdout
+                 stdin
+                 log-streams
+                 hook)))
 
 (assign context.context context)
 
-(var client (.connect (.spawn Client (lit (port 8199) context (input stdin) (output stdout))))
-     server (.on (.open (.spawn Server) 8199) 'open (-> (print "listening"))))
+(var client (pipe (.spawn Client (lit (input stdin) (output stdout)))
+                  (.connect  8199 ))
 
+     server (pipe (.spawn Server context)
+                  (.open  8199)
+                  (.on 'open (-> (print "listening")))))
 
+(mixin (lit client server) context)
