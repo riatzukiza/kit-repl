@@ -54,7 +54,11 @@ js from sibilant and evaluated in the context given"
 
   (extend Event-emitter)
 
-  (def spawn (context) ((create this) context))
+  (def spawn ()
+    (.create Object this))
+
+  (def bind (context)
+    (.init this context))
 
   (def despawn ())
 
