@@ -10,7 +10,7 @@
 (include "../macros")
 (import-namespace repl)
 
-(require! 'child_process 'repl 'fs 'sibilant 'net  'vm
+(require! 'child_process 'repl 'fs 'sibilant 'net  'vm 'util
           (lit Event-emitter) "./event-emitter")
 
 
@@ -32,6 +32,7 @@
   "curried invocation of the write method of a stream."
   (=> (stream)
       (.write stream data)))
+
 
 (def-curried bind-eval (context socket data)
   (make-promise
