@@ -163,6 +163,7 @@ var child_process = require("child_process"),
     sibilant = require("sibilant"),
     net = require("net"),
     vm = require("vm"),
+    util = require("util"),
     { 
   EventEmitter
  } = require("./event-emitter");
@@ -212,7 +213,7 @@ var bindEval = R.curry((context, socket, data) => {
 
 });
 var createServer = (function createServer$(_context) {
-  /* create-server src/server.sibilant:42:0 */
+  /* create-server src/server.sibilant:43:0 */
 
   return net.createServer(bindSocket(createContext(_context)));
 });
@@ -228,7 +229,7 @@ var bindSocket = R.curry((context, socket) => {
 
 });
 var createContext = (function createContext$(_context) {
-  /* create-context src/server.sibilant:53:0 */
+  /* create-context src/server.sibilant:54:0 */
 
   return vm.createContext(mixin([ _context, { 
     sibilant
