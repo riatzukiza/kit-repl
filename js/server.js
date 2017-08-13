@@ -182,37 +182,32 @@ var write = (function write$(data) {
   "curried invocation of the write method of a stream.";
   return (stream) => {
   	
-    return (new Promise((success, fail) => {
-    	
-      var resolve = success,
-          reject = fail;
-      return stream.write(data, success);
-    
-    }));
+    return stream.write(data);
   
   };
 });
 var bindEval = R.curry((context, socket, data) => {
 	
-  return Promise.resolve((function() {
-    try {
-      return (function(js) {
-        /* ../../../../node_modules/kit/inc/macros.sibilant:162:9 */
-      
-        return write(js)(socket).then(() => {
-        	
-          return write(runIn(context, js))(socket);
+  return (new Promise((success, fail) => {
+  	
+    var resolve = success,
+        reject = fail;
+    return (function() {
+      try {
+        return (function(js) {
+          /* ../../../../node_modules/kit/inc/macros.sibilant:162:9 */
         
-        });
-      })(sibilant(data.toString()).js);
-    } catch (e) {
-      return e;
-    }
-  }).call(this)).then((function(b, ...others) {
-    /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+          return socket.write(js, () => {
+          	
+            return socket.write(util.inspect(runIn(context, js)));
+          
+          });
+        })(sibilant(data.toString()).js);
+      } catch (e) {
+        return socket.write(util.inspect(e));
+      }
+    }).call(this);
   
-    console.log("result", b, ...others);
-    return b;
   }));
 
 });
