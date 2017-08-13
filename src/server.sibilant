@@ -30,14 +30,14 @@
 
 (def write (data )
   "curried invocation of the write method of a stream."
-  (=> (stream) (make-promise (.write stream data success))))
+  (=> (stream)
+      (.write stream data)))
 
 (def-curried bind-eval (context socket data)
-  (.then (.resolve Promise (try (let ((js (get (sibilant (.to-string data)) 'js )))
-                                  (.then ((write  js) socket),(-> ((write (run-in context js)) socket))))
-                                e))
-         (aprint "result"))
-  )
+  (make-promise
+   (try (let ((js (get (sibilant (.to-string data)) 'js )))
+          (.write socket js (-> (.write socket (.inspect util (run-in context js))))))
+        (.write socket (.inspect util e)))))
 
 (def create-server (*context)
   (.create-server net (bind-socket (create-context *context))))
