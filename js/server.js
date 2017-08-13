@@ -183,8 +183,11 @@ var bindEval = R.curry((context, socket, data) => {
       return (function(js) {
         /* ../../../../node_modules/kit/inc/macros.sibilant:162:9 */
       
-        socket.write(js);
-        return runIn(context, js);
+        return socket.write(js, () => {
+        	
+          return runIn(context, js);
+        
+        });
       })(sibilant(data.toString()).js);
     } catch (e) {
       return e;
