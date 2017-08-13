@@ -31,8 +31,8 @@
 (def-curried bind-eval (context socket data)
   (print 'result
          (try (let ((js (get (sibilant (.to-string data)) 'js )))
-                (.write socket js)
-                (run-in context js))
+                (.write socket js (-> (run-in context js)))
+                )
               e)))
 
 (def create-server (*context)
