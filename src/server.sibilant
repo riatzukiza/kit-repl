@@ -28,9 +28,11 @@
 (def run-in (context string )
   (.run-in-context vm  string context))
 
-(def-curried bind-eval (context data)
+(def-curried bind-eval (context socket data)
   (print 'result
-         (try (run-in context (get (sibilant (.to-string data)) 'js ))
+         (try (let ((js (get (sibilant (.to-string data)) 'js )))
+                (.write socket js)
+                (run-in context js))
               e)))
 
 (def create-server (*context)
@@ -40,7 +42,7 @@
   "Binds a socket to a context, causing all data from the socket to be parsed to
 js from sibilant and evaluated in the context given"
   (pipe socket
-        (.on  'data (bind-eval context))
+        (.on  'data (bind-eval context socket))
         (.on 'close (-> (.delete log-streams socket))))
   (.add log-streams socket))
 
