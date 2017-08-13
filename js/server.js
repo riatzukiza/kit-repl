@@ -176,11 +176,16 @@ var runIn = (function runIn$(context, string) {
 
   return vm.runInContext(string, context);
 });
-var bindEval = R.curry((context, data) => {
+var bindEval = R.curry((context, socket, data) => {
 	
   return console.log("result", (function() {
     try {
-      return runIn(context, sibilant(data.toString()).js);
+      return (function(js) {
+        /* ../../../../node_modules/kit/inc/macros.sibilant:162:9 */
+      
+        socket.write(js);
+        return runIn(context, js);
+      })(sibilant(data.toString()).js);
     } catch (e) {
       return e;
     }
@@ -188,14 +193,14 @@ var bindEval = R.curry((context, data) => {
 
 });
 var createServer = (function createServer$(_context) {
-  /* create-server src/server.sibilant:36:0 */
+  /* create-server src/server.sibilant:38:0 */
 
   return net.createServer(bindSocket(createContext(_context)));
 });
 var bindSocket = R.curry((context, socket) => {
 	
   "Binds a socket to a context, causing all data from the socket to be parsed to\n"+"js from sibilant and evaluated in the context given";
-  socket.on("data", bindEval(context)).on("close", () => {
+  socket.on("data", bindEval(context, socket)).on("close", () => {
   	
     return logStreams.delete(socket);
   
@@ -204,7 +209,7 @@ var bindSocket = R.curry((context, socket) => {
 
 });
 var createContext = (function createContext$(_context) {
-  /* create-context src/server.sibilant:47:0 */
+  /* create-context src/server.sibilant:49:0 */
 
   return vm.createContext(mixin([ _context, { 
     sibilant
