@@ -176,27 +176,48 @@ var runIn = (function runIn$(context, string) {
 
   return vm.runInContext(string, context);
 });
+var write = (function write$(data) {
+  /* write src/server.sibilant:31:0 */
+
+  "curried invocation of the write method of a stream.";
+  return (stream) => {
+  	
+    return (new Promise((success, fail) => {
+    	
+      var resolve = success,
+          reject = fail;
+      return stream.write(data, success);
+    
+    }));
+  
+  };
+});
 var bindEval = R.curry((context, socket, data) => {
 	
-  return console.log("result", (function() {
+  return Promise.resolve((function() {
     try {
       return (function(js) {
         /* ../../../../node_modules/kit/inc/macros.sibilant:162:9 */
       
-        return socket.write(js, () => {
+        return write(js)(socket).then(() => {
         	
-          return runIn(context, js);
+          return write(runIn(context, js))(socket);
         
         });
       })(sibilant(data.toString()).js);
     } catch (e) {
       return e;
     }
-  }).call(this));
+  }).call(this)).then((function(b, ...others) {
+    /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
+  
+    console.log("result", b, ...others);
+    return b;
+  }));
 
 });
 var createServer = (function createServer$(_context) {
-  /* create-server src/server.sibilant:38:0 */
+  /* create-server src/server.sibilant:42:0 */
 
   return net.createServer(bindSocket(createContext(_context)));
 });
@@ -212,7 +233,7 @@ var bindSocket = R.curry((context, socket) => {
 
 });
 var createContext = (function createContext$(_context) {
-  /* create-context src/server.sibilant:49:0 */
+  /* create-context src/server.sibilant:53:0 */
 
   return vm.createContext(mixin([ _context, { 
     sibilant
