@@ -214,7 +214,7 @@ var Client = Interface.define("Client", {
           return this._socket.write($fpipe);
         
         });
-        this._socket = net.connect(port).on("data", logReply).on("connect", () => {
+        this._socket = net.connect(port).on("connect", () => {
         	
           return console.log("connected");
         
