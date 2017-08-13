@@ -211,12 +211,7 @@ var Client = Interface.define("Client", {
       
         rl.on("line", ($fpipe) => {
         	
-          return this._socket.write((function(b, ...others) {
-            /* ../../../../node_modules/kit/inc/console.sibilant:10:8 */
-          
-            console.log("request", b, ...others);
-            return b;
-          })($fpipe));
+          return this._socket.write($fpipe);
         
         });
         this._socket = net.connect(port).on("data", logReply).on("connect", () => {
