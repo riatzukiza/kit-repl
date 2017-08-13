@@ -177,7 +177,8 @@ var logReply = (d) => {
 var Client = Interface.define("Client", { 
   init( port = this.port,host = this.host,input = this.input,output = this.output,retryInterval = seconds(5),rl = readline.createInterface({ 
     input,
-    output
+    output,
+    prompt:"#>"
    }) ){ 
     
       this.port = port;this.host = host;this.input = input;this.output = output;this.retryInterval = retryInterval;this.rl = rl;
@@ -214,7 +215,7 @@ var Client = Interface.define("Client", {
           return this._socket.write($fpipe);
         
         });
-        this._socket = net.connect(port).on("connect", () => {
+        this._socket = net.connect(port).on("data", logReply).on("connect", () => {
         	
           return console.log("connected");
         
