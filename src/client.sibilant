@@ -44,7 +44,6 @@
     (fluently (.on  rl 'line (fpipe this.*socket.write))
               (assign this.*socket
                       (pipe (.connect net port)
-                            (.on  'data log-reply)
                             (.on  'connect (-> (print 'connected)))
                             (.on 'close (-> (print "connection closed,attempting to reconnect")
                                             (.*reconnect this )))
