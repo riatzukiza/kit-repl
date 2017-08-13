@@ -1,6 +1,6 @@
 (namespace repl)
-(require! (lit Server log-streams) "./src/server"
-          (lit Client) "./src/client.sibilant")
+(require! (lit Server log-streams) "./js/server"
+          (lit Client) "./js/client")
 (export Server)
 (export Client)
 (export log-streams)

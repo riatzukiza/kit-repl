@@ -41,7 +41,7 @@
     (set-timeout (-> (.connect this)) retry-interval))
 
   (def-generic connect (port rl)
-    (fluently (.on  rl 'line (fpipe ((aprint "request")) this.*socket.write))
+    (fluently (.on  rl 'line (fpipe this.*socket.write))
               (assign this.*socket
                       (pipe (.connect net port)
                             (.on  'data log-reply)

@@ -45,8 +45,7 @@ js from sibilant and evaluated in the context given"
   (.add log-streams socket))
 
 (def create-context (*context)
-  (.create-context vm (mixin [*context (lit require sibilant)])))
-
+  (.create-context vm (mixin [*context (lit sibilant)])))
 
 (def-interface Server
     ((*context global)
