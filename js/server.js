@@ -191,7 +191,7 @@ var writeLine = R.curry((data, socket) => {
 
 });
 var { 
-  _:__
+  __:_
  } = R;
 var bindEval = R.curry((context, socket, data) => {
 	
