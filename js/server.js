@@ -174,10 +174,10 @@ var logFile = fs.createWriteStream("./log");
 var logStreams = (new Set([ logFile ]));
 var stdout = process.stdout;
 exports.logStreams = logStreams;
-var runIn = (function runIn$(context, string) {
-  /* run-in src/server.sibilant:29:0 */
-
+var runIn = R.curry((context, string) => {
+	
   return vm.runInContext(string, context);
+
 });
 var writeLine = R.curry((data, socket) => {
 	
@@ -211,7 +211,7 @@ var bindEval = R.curry((context, socket, data) => {
 
 });
 var createServer = (function createServer$(_context) {
-  /* create-server src/server.sibilant:48:0 */
+  /* create-server src/server.sibilant:46:0 */
 
   return net.createServer(bindSocket(createContext(_context)));
 });
@@ -227,7 +227,7 @@ var bindSocket = R.curry((context, socket) => {
 
 });
 var createContext = (function createContext$(_context) {
-  /* create-context src/server.sibilant:59:0 */
+  /* create-context src/server.sibilant:57:0 */
 
   return vm.createContext(mixin([ _context, { 
     sibilant
