@@ -163,7 +163,9 @@ var child_process = require("child_process"),
     sibilant = require("sibilant"),
     net = require("net"),
     vm = require("vm"),
-    util = require("util"),
+    { 
+  inspect
+ } = require("util"),
     { 
   EventEmitter
  } = require("./event-emitter");
@@ -173,7 +175,7 @@ var logStreams = (new Set([ logFile ]));
 var stdout = process.stdout;
 exports.logStreams = logStreams;
 var runIn = (function runIn$(context, string) {
-  /* run-in src/server.sibilant:28:0 */
+  /* run-in src/server.sibilant:29:0 */
 
   return vm.runInContext(string, context);
 });
@@ -209,7 +211,7 @@ var bindEval = R.curry((context, socket, data) => {
 
 });
 var createServer = (function createServer$(_context) {
-  /* create-server src/server.sibilant:47:0 */
+  /* create-server src/server.sibilant:48:0 */
 
   return net.createServer(bindSocket(createContext(_context)));
 });
@@ -225,7 +227,7 @@ var bindSocket = R.curry((context, socket) => {
 
 });
 var createContext = (function createContext$(_context) {
-  /* create-context src/server.sibilant:58:0 */
+  /* create-context src/server.sibilant:59:0 */
 
   return vm.createContext(mixin([ _context, { 
     sibilant
