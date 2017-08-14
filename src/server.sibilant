@@ -28,17 +28,21 @@
 (def run-in (context string )
   (.run-in-context vm  string context))
 
-(def write (data )
-  "curried invocation of the write method of a stream."
-  (=> (stream)
-      (.write stream data)))
+(def-curried write-line (data socket)
+  (make-promise (.write socket (+ (.to-string data) "\n") success)))
 
+
+(var (lit _) R)
 
 (def-curried bind-eval (context socket data)
-  (make-promise
-   (try (let ((js (get (sibilant (.to-string data)) 'js )))
-          (.write socket js (-> (.write socket (.inspect util (run-in context js))))))
-        (.write socket (.inspect util e)))))
+  (pipe (make-promise
+         (try (success (get (sibilant (.to-string data)) 'js ))
+              (fail e)))
+        (.then (write-line _ socket ))
+        (.then  (run-in context))
+        (.then inspect)
+        (.catch inspect)
+        (.then (write-line  _ socket ))))
 
 (def create-server (*context)
   (.create-server net (bind-socket (create-context *context))))
