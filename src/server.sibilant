@@ -33,7 +33,7 @@
 (def-curried write-js (js socket)
   (make-promise (.write socket ("```js\n"
                                 js
-                                "\n```")
+                                "\n```\n")
                         (-> (success js)))))
 
 (var (lit (__ _)) R)
