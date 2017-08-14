@@ -30,6 +30,11 @@
 
 (def-curried write-line (data socket)
   (make-promise (.write socket (+ (.to-string data) "\n") (-> (success data)))))
+(def-curried write-js (js socket)
+  (make-promise (.write socket ("```js\n"
+                                js
+                                "\n```")
+                        (-> (success js)))))
 
 (var (lit (__ _)) R)
 
@@ -37,7 +42,7 @@
   (pipe (make-promise
          (try (success (get (sibilant (.to-string data)) 'js ))
               (fail e)))
-        (.then (write-line _ socket ))
+        (.then (write-js _ socket ))
         (.then  (run-in context))
         (.then inspect)
         (.catch inspect)
