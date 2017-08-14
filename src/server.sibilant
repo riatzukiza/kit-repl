@@ -25,13 +25,11 @@
 
 (export log-streams)
 
-
-(def run-in (context string )
+(def-curried run-in (context string )
   (.run-in-context vm  string context))
 
 (def-curried write-line (data socket)
   (make-promise (.write socket (+ (.to-string data) "\n") success)))
-
 
 (var (lit _) R)
 
