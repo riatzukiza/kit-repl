@@ -10,7 +10,8 @@
 (include "../macros")
 (import-namespace repl)
 
-(require! 'child_process 'repl 'fs 'sibilant 'net  'vm 'util
+(require! 'child_process 'repl 'fs 'sibilant 'net  'vm
+          (lit inspect) 'util
           (lit Event-emitter) "./event-emitter")
 
 

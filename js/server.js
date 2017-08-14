@@ -177,16 +177,20 @@ var runIn = (function runIn$(context, string) {
 
   return vm.runInContext(string, context);
 });
-var write = (function write$(data) {
-  /* write src/server.sibilant:31:0 */
-
-  "curried invocation of the write method of a stream.";
-  return (stream) => {
+var writeLine = R.curry((data, socket) => {
+	
+  return (new Promise((success, fail) => {
   	
-    return stream.write(data);
+    var resolve = success,
+        reject = fail;
+    return socket.write((data.toString() + "\n"), success);
   
-  };
+  }));
+
 });
+var { 
+  _
+ } = R;
 var bindEval = R.curry((context, socket, data) => {
 	
   return (new Promise((success, fail) => {
@@ -195,25 +199,17 @@ var bindEval = R.curry((context, socket, data) => {
         reject = fail;
     return (function() {
       try {
-        return (function(js) {
-          /* ../../../../node_modules/kit/inc/macros.sibilant:162:9 */
-        
-          return socket.write(js, () => {
-          	
-            return socket.write(util.inspect(runIn(context, js)));
-          
-          });
-        })(sibilant(data.toString()).js);
+        return success(sibilant(data.toString()).js);
       } catch (e) {
-        return socket.write(util.inspect(e));
+        return fail(e);
       }
     }).call(this);
   
-  }));
+  })).then(writeLine(_, socket)).then(runIn(context)).then(inspect).catch(inspect).then(writeLine(_, socket));
 
 });
 var createServer = (function createServer$(_context) {
-  /* create-server src/server.sibilant:43:0 */
+  /* create-server src/server.sibilant:47:0 */
 
   return net.createServer(bindSocket(createContext(_context)));
 });
@@ -229,7 +225,7 @@ var bindSocket = R.curry((context, socket) => {
 
 });
 var createContext = (function createContext$(_context) {
-  /* create-context src/server.sibilant:54:0 */
+  /* create-context src/server.sibilant:58:0 */
 
   return vm.createContext(mixin([ _context, { 
     sibilant
