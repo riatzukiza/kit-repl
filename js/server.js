@@ -185,7 +185,11 @@ var writeLine = R.curry((data, socket) => {
   	
     var resolve = success,
         reject = fail;
-    return socket.write((data.toString() + "\n"), success);
+    return socket.write((data.toString() + "\n"), () => {
+    	
+      return success(data);
+    
+    });
   
   }));
 
