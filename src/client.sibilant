@@ -11,7 +11,7 @@
 (include "../macros")
 
 (def seconds (n) (* n 1000))
-(var log-reply (=> (d) (print "lisp" (.to-string d)))
+(var log-reply (=> (d) (print "reply:|" d)(print "lisp" (.to-string d)))
      log-error (=> (e) (.error console e.message)))
 
 (def-interface Client

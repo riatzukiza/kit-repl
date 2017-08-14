@@ -1,0 +1,19 @@
+;; The point of this script is to automaticly compile source files as they change.
+(include "../kit/macros")
+(require! (lit create extend mixin conditional cond partially-apply-after ) "../kit/js/util")
+(require! R "ramda")
+(require! 'fs)
+(macro add-to-module-lookup (path)
+       `(let ( (p "/") (inc @ (or path (process.cwd))))
+          (require! 'path)
+          (assign module.paths
+                  [...module.paths
+                   ...(pipe
+                       (.split inc path.sep)
+                       (.map (=> (el)
+                                 (var r (path.join p "node_modules"))
+                                 (assign p (path.join p el))
+                                 r))
+                       (.filter (=> (e) (not (.includes module.paths e))))
+                       )])
+          null))
