@@ -31,7 +31,7 @@
 (def-curried write-line (data socket)
   (make-promise (.write socket (+ (.to-string data) "\n") success)))
 
-(var (lit (_ __)) R)
+(var (lit (__ _)) R)
 
 (def-curried bind-eval (context socket data)
   (pipe (make-promise
