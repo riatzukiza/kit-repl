@@ -200,7 +200,7 @@ var writeJs = R.curry((js, socket) => {
   	
     var resolve = success,
         reject = fail;
-    return socket.write(("```js\n" + js + "\n```"), () => {
+    return socket.write(("```js\n" + js + "\n```\n"), () => {
     	
       return success(js);
     
