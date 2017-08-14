@@ -29,7 +29,7 @@
   (.run-in-context vm  string context))
 
 (def-curried write-line (data socket)
-  (make-promise (.write socket (+ (.to-string data) "\n") success)))
+  (make-promise (.write socket (+ (.to-string data) "\n") (-> (success data)))))
 
 (var (lit (__ _)) R)
 
