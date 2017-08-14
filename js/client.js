@@ -166,8 +166,7 @@ var seconds = (function seconds$(n) {
 });
 var logReply = (d) => {
 	
-  console.log("reply:|", d);
-  return console.log("lisp", d.toString());
+  return console.log(d.toString());
 
 },
     logError = (e) => {
