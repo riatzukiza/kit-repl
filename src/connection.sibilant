@@ -1,0 +1,46 @@
+
+(def-curried run-in (context string )
+  (.run-in-context vm  string context))
+
+(def-curried write-line (data socket)
+  (make-promise (.write socket (+ (.to-string data) "\n") (-> (success data)))))
+
+(def-curried write-js (js socket)
+  (make-promise (.write socket ("```js\n"
+                                js
+                                "\n```\n")
+                        (-> (success js)))))
+
+(def-interface Logger ()
+  (def write ()
+    )
+  )
+(def-interface Evaluator (socket context)
+
+  (def-generic bind (data socket context)
+    (pipe (make-promise
+           (try (success (get (sibilant (.to-string data)) 'js ))
+                (fail e)))
+          (.then  (run-in context))
+          (.then inspect)
+          (.catch inspect)
+          (.then (write-line  _ socket )))))
+
+(def-interface Connection (socket evaluator)
+
+  (connections (new Map))
+
+  (def spawn (socket context)
+    (remember this.connections socket
+              ((create Connection) socket
+               ((create Evaluator)
+                socket
+                context))))
+
+  (def-generic start (socket evaluator)
+    (.add log-streams
+          (pipe socket
+                (.on  'data (#-> evaluator.bind))
+                (.on 'close (-> (.delete log-streams socket))))))
+  (def stop ())
+  )

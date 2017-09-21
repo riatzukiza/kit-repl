@@ -40,8 +40,14 @@
   (def-generic *reconnect (retry-interval)
     (set-timeout (-> (.connect this)) retry-interval))
 
+  (def write (d)
+    (make-promise
+     (pipe (.once this.*socket 'error fail)
+           (.write  d (-> (.remove-listener this.*socket 'error fail)
+                          (success))))))
+
   (def-generic connect (port rl)
-    (fluently (.on  rl 'line (fpipe this.*socket.write))
+    (fluently (.on  rl 'line (fpipe this.write))
               (assign this.*socket
                       (pipe (.connect net port)
                             (.on  'data log-reply)

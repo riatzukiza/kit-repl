@@ -8,7 +8,6 @@
 (import-namespace interface)
 
 (include "../macros")
-(import-namespace repl)
 
 (require! 'child_process 'repl 'fs 'sibilant 'net  'vm
           (lit inspect) 'util
@@ -30,6 +29,7 @@
 
 (def-curried write-line (data socket)
   (make-promise (.write socket (+ (.to-string data) "\n") (-> (success data)))))
+
 (def-curried write-js (js socket)
   (make-promise (.write socket ("```js\n"
                                 js

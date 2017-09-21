@@ -2,7 +2,8 @@
  "version": "0.0.3",
  "description": "A networked repl for an extension of sibilant I call kit.",
  "main": "index.js",
- "dependencies": {"kit": "^1.0.0"},
+ "dependencies": {"kit": "../kit",
+                  "sibilant":"../sibilant"},
  "devDependencies": {},
  "scripts": {"local": "sibilant -x cli.sibilant"},
  "repository":
