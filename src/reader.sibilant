@@ -1,0 +1,82 @@
+(namespace reader)
+
+;; I am confused only about the naming of these concepts.
+;; they do exactly what they are supose to do,
+;; but I know, or at least I feel, but I am pretty sure I know,
+;; what they need to do.
+
+;; I think this concept will expand and fulfill its self later,
+
+;; what do the prior meanings of words have to do with this any way,
+;; I am inventing a new language, aren't I? :p
+
+(def scanning? (parser) (not (or parser.in-quote parser.comment)))
+
+(var readers
+     (lit
+
+      ("\"" (lambda (c) (assign this.in-quote (not this.in-quote)) c))
+      (";" (lambda (c) (assign this.comment true) ""))))
+
+(macro reader-macro (name ...body)
+       `(set readers @name
+             (lambda (char) ...@body)))
+
+(macro validator (name ...body)
+       `(reader-macro @name
+                      (when (scanning? this) ...@body char)))
+
+
+(validator "("   (incr this.parens) )
+(validator ")"   (decr this.parens) )
+
+(validator "["   (incr this.square-braces))
+(validator "]"   (decr this.square-braces))
+
+(validator "{"   (incr this.curly-braces))
+(validator "}"   (decr this.curly-braces))
+
+(def-actor Reader ((fragment [])
+                   (parens 0)
+                   (square-braces 0)
+                   (curly-braces 0)
+                   (in-quote? false))
+  (parsers (new Map))
+
+  (def spawn (compiler)
+    (remember this.parsers compiler
+              (.start ((create Parser)))))
+  (def start ()
+    (.on  this 'message
+          (=> (string)
+              (enque-task this.promise (print "message")
+                          (.validate this string)))))
+
+  (def-generic validate (string fragment)
+
+    (var lines (.split string "\n"))
+
+    (each lines (l) (.handle-line this l)))
+
+  (def-task handle-line (line )
+
+    (var looping true i 0)
+    (var chars (.split line ""))
+
+    (assign this.comment false)
+
+    (while (and looping (not this.comment))
+      (var char (get chars (incr i)))
+
+
+      (if (get readers char) (assign char (.call (get readers char ) this char )))
+
+      (when looping
+        (.push this.fragment char)
+        (when (and (not this.parens) (not this.curly-braces) (not this.square-braces))
+          (var s (.trim (.join this.fragment "")))
+          (if (not (= s.length 0))
+              (.emit this 'expression s))
+          (assign this.fragment []))
+
+        (if (>= i chars.length) (assign looping false))))))

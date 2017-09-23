@@ -11,20 +11,55 @@
                                 "\n```\n")
                         (-> (success js)))))
 
-(def-interface Logger ()
-  (def write ()
-    )
-  )
-(def-interface Evaluator (socket context)
+;; (def-interface Logger ()
+;;   (def write ()))
+;; (macro switch! (v ...pairs)
+;;        (var default-expression (if (odd? pairs.length) (.pop pairs)))
+;;        ["switch(" v ") {"
+;;                   (bulk-map pairs (=> (value expression)
+;;                                       ["case " value ":" ]
+;;                                       ))
+;;                   "}"]
 
-  (def-generic bind (data socket context)
-    (pipe (make-promise
-           (try (success (get (sibilant (.to-string data)) 'js ))
-                (fail e)))
-          (.then  (run-in context))
-          (.then inspect)
-          (.catch inspect)
-          (.then (write-line  _ socket )))))
+;;        )
+;; (switch char
+
+;;         (";"  (assign looping false)
+;;               break)
+;;         ("\"" (assign this.in-quote true)
+;;               break)
+
+;;         ("("  (incr this.parens)
+;;               break)
+;;         (")"  (decr this.parens)
+;;               break)
+
+;;         ("["  (incr this.square-braces)
+;;               break)
+;;         ("]"  (decr this.square-braces)
+;;               break)
+
+;;         ("{"  (incr this.curly-braces)
+;;               break)
+;;         ("}"  (decr this.curly-braces)
+;;               break))
+
+;; (var special-chars
+;;      {";" (assign looping false)
+;;       "\"" (assign this.in-quote true)
+;;       "(" (incr this.parens)
+;;       ")" (decr this.parens)
+
+;;       "[" (incr this.square-braces)
+;;       "]" (decr this.square-braces)
+
+;;       "{" (incr this.curly-braces)
+;;       "}" (decr this.curly-braces)})
+
+
+(def-interface Accumulator ())
+
+
 
 (def-interface Connection (socket evaluator)
 
@@ -42,5 +77,5 @@
           (pipe socket
                 (.on  'data (#-> evaluator.bind))
                 (.on 'close (-> (.delete log-streams socket))))))
-  (def stop ())
-  )
+
+  (def stop ()))

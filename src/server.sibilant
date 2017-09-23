@@ -11,7 +11,8 @@
 
 (require! 'child_process 'repl 'fs 'sibilant 'net  'vm
           (lit inspect) 'util
-          (lit Event-emitter) "./event-emitter")
+          ;;(lit Event-emitter) "./event-emitter"
+          )
 
 
 (.include sibilant "kit/header")
@@ -65,6 +66,7 @@ js from sibilant and evaluated in the context given"
 (def-interface Server
     ((*context global)
      (tcp-server (create-server *context)))
+  (sibilant sibilant)
 
   (extend Event-emitter)
 

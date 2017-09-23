@@ -1,0 +1,10 @@
+(def-interface Evaluator (socket context (compiler ((create Compiler))))
+
+  (def-generic bind (data socket context)
+    (pipe (make-promise
+           (try (success (get (sibilant (.to-string data)) 'js ))
+                (fail e)))
+          (.then  (run-in context))
+          (.then inspect)
+          (.catch inspect)
+          (.then (write-line  _ socket )))))
