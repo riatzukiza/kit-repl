@@ -1,15 +1,5 @@
 (namespace reader)
 
-;; I am confused only about the naming of these concepts.
-;; they do exactly what they are supose to do,
-;; but I know, or at least I feel, but I am pretty sure I know,
-;; what they need to do.
-
-;; I think this concept will expand and fulfill its self later,
-
-;; what do the prior meanings of words have to do with this any way,
-;; I am inventing a new language, aren't I? :p
-
 (def scanning? (parser) (not (or parser.in-quote parser.comment)))
 
 (var readers
@@ -68,15 +58,22 @@
     (while (and looping (not this.comment))
       (var char (get chars (incr i)))
 
-
       (if (get readers char) (assign char (.call (get readers char ) this char )))
 
       (when looping
+
         (.push this.fragment char)
-        (when (and (not this.parens) (not this.curly-braces) (not this.square-braces))
+
+        (when (and (not this.parens)
+                   (not this.curly-braces)
+                   (not this.square-braces))
+
           (var s (.trim (.join this.fragment "")))
+
           (if (not (= s.length 0))
               (.emit this 'expression s))
+
           (assign this.fragment []))
 
-        (if (>= i chars.length) (assign looping false))))))
+        (if (>= i chars.length)
+            (assign looping false))))))

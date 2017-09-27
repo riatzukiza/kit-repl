@@ -1,0 +1,7 @@
+(const PORT 8199)
+(var network (pipe Network .spawn .start
+
+                   (.listen PORT)
+                   (.on 'packet (=> ([data endpoint])))))
+(.send network ['localhost 'hi])
+

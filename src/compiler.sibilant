@@ -1,3 +1,15 @@
-(def-actor Compiler ((parser (.spawn Parser this)))
+(def-actor Compiler ()
 
-  (def write (data ) (.validate this (.to-string data))))
+  (def-generic start (compile) (.on this 'message compile))
+
+  (def-generic stop () (.remove-listener this 'message compile))
+
+  (def-generic spawn () ((create this)))
+
+  (def compile ()
+    (make-promise
+     (try (pipe (.to-string data)
+                sibilant
+                (get  'js )
+                success)
+          (fail e)))))

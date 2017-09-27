@@ -1,0 +1,23 @@
+(const PORT 8199)
+
+(var server (pipe (.spawn repl.Server)
+                  .bind
+                  (.open  PORT))
+
+     client (pipe (.spawn repl.Client)
+                  (.connect PORT))
+
+     reader (pipe (.spawn repl.Reader))
+
+     evaluator (pipe (.spawn repl.Evaluator))
+
+     printer (pipe (.spawn repl.Printer))
+
+     src (pipe (.spawn File-system "./src")
+               (.watch  ".")
+               (.on 'change compile)))
+
+
+
+
+

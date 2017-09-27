@@ -1,94 +1,28 @@
 (namespace repl)
 
-(include "kit/header")
-(import-namespace kit)
-
-(include "../interface/index.sibilant")
-
-(import-namespace interface)
-
-(include "../macros")
-
-(require! 'child_process 'repl 'fs 'sibilant 'net  'vm
-          (lit inspect) 'util
-          ;;(lit Event-emitter) "./event-emitter"
-          )
+(require! 'child_process  'sibilant
+          (lit inspect) 'util)
 
 
-(.include sibilant "kit/header")
 
-(var log-file (fs.create-write-stream "./log"))
 
-(var log-streams (new Set [log-file]))
+(def-actor Server
+    ((network (.spawn Network))
+     (reader (.spawn Reader))
+     (compiler (.spawn Compiler))
+     (evaluator (.spawn Evaluator))
+     (printer (.spawn Printer network)))
 
-(var stdout process.stdout)
+  (def-generic start (network evaluator reader printer)
 
-(export log-streams)
+    (.on network 'packet (send reader))
+    (.on reader 'expression (send compiler))
+    (.on compiler 'code (send evaluator))
+    (.on evaluator 'result (send printer)))
 
-(def-curried run-in (context string )
-  (.run-in-context vm  string context))
-
-(def-curried write-line (data socket)
-  (make-promise (.write socket (+ (.to-string data) "\n") (-> (success data)))))
-
-(def-curried write-js (js socket)
-  (make-promise (.write socket ("```js\n"
-                                js
-                                "\n```\n")
-                        (-> (success js)))))
-
-(var (lit (__ _)) R)
-
-(def-curried bind-eval (context socket data)
-  (pipe (make-promise
-         (try (success (get (sibilant (.to-string data)) 'js ))
-              (fail e)))
-        (.then (write-js _ socket ))
-        (.then  (run-in context))
-        (.then inspect)
-        (.catch inspect)
-        (.then (write-line  _ socket ))))
-
-(def create-server (*context)
-  (.create-server net (bind-socket (create-context *context))))
-
-(def-curried bind-socket  (context  socket)
-  "Binds a socket to a context, causing all data from the socket to be parsed to
-js from sibilant and evaluated in the context given"
-  (pipe socket
-        (.on  'data (bind-eval context socket))
-        (.on 'close (-> (.delete log-streams socket))))
-  (.add log-streams socket))
-
-(def create-context (*context)
-  (.create-context vm (mixin [*context (lit sibilant)])))
-
-(def-interface Server
-    ((*context global)
-     (tcp-server (create-server *context)))
-  (sibilant sibilant)
-
-  (extend Event-emitter)
-
-  (def spawn ()
-    (.create Object this))
-
-  (def bind (context)
-    (.init this context))
-
-  (def despawn ())
-
-  (def-generic open (port on-open tcp-server)
-    (fluently
-
-     (when (function? on-open)
-       (.on this 'open on-open))
-
-     (.listen tcp-server (lit port)
-                       (-> (.emit this 'open)))) )
-
-  (def-generic close (tcp-server)
-    (fluently (.close tcp-server (-> (.emit this 'close))))))
+  (def stop ())
+  (def spawn ())
+  )
 
 (export Server)
 

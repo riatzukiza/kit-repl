@@ -1,10 +1,16 @@
-(def-interface Evaluator (socket context (compiler ((create Compiler))))
 
-  (def-generic bind (data socket context)
-    (pipe (make-promise
-           (try (success (get (sibilant (.to-string data)) 'js ))
-                (fail e)))
+(def-curried run-in (context string )
+  (.run-in-context vm  string context))
+
+(def-actor Evaluator (context)
+
+  (def-generic spawn () ((create this)))
+
+  (def-generic start () (.on this 'message (#-> this.eval)))
+  (def-generic stop ())
+
+  (def-generic eval (js context)
+    (pipe (resolve js)
           (.then  (run-in context))
-          (.then inspect)
-          (.catch inspect)
-          (.then (write-line  _ socket )))))
+          (.then (#-> inspect (this.emit 'log)))
+          (.catch (#-> inspect (this.emit 'error))))))

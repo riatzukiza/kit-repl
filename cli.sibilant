@@ -24,18 +24,18 @@
   "multiplexed log which which will write data to every client stream"
   (server-log "logging to shells" data)
   (.for-each  log-streams (write (time.formatted data))))
+
 (var (lit stdout stdin) process)
+
 (hook stdout)
+
 (var stdio (lit (input stdin) (output stdout)))
+
 (def time-formatted (d) ("[" (new Date) "]:" (.to-string d)))
-;; now comes the part where I start developing the next version of this
-;; app using the current one.
-;; What I have essentially created is an evaluate for my own programming language "kit".
-;; Perhaps it is time I finish it off, get rid of all those annoying "includes"
-;; at the top of my files that are highly redundant, and build my own compiler.
 
 (let ((client (.spawn Client stdio))
       (server (.on (.spawn Server ) 'open (-> (print "listening")))))
+
   (let ((context (lit Server Client
                       (sibilant (require 'sibilant))
                       client server

@@ -1,5 +1,7 @@
 (require! (lit Event-emitter) "events")
+
 (def resolve (v)  (.resolve Promise v))
+
 (macro def-actor (name args ...body)
        `(def-interface @name @args
           (extend Actor)
@@ -19,7 +21,8 @@
                          (catch (.emit this 'error e)
                            (throw e)))))
 
-(macro def-task (name args ...body) `(def @name @args (enque-task this.promise ...@body)))
+(macro def-task (name args ...body)
+       `(def @name @args (enque-task this.promise ...@body)))
 
 (def-lit-macro def-task (name args ...body)
   `(gmth @name @args

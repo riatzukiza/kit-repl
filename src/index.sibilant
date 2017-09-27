@@ -4,12 +4,19 @@
 (include "kit/header")
 (import-namespace kit)
 
+(include "../interface/index.sibilant")
+(import-namespace interface)
+
+(include "../macros")
+
+(include "./util")
+(include "../src/actor")
+
 ;; 
 ;; (require! (lit Server log-streams) "./js/server"
 ;;           (lit Client) "./js/client")
 
-(include "./event-emitter.sibilant")
-
+(include "./reader")
 (include "./server"
          "./client"
          )
