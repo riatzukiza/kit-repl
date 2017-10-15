@@ -1,0 +1,52 @@
+(namespace repl)
+
+(require! 'child_process  'sibilant
+          (lit inspect) 'util)
+
+(var REPL (Layer.of [Reader Compiler Evaluator]))
+(define Responder Actor
+  (init (listener))
+
+  (def send ([type data])
+    (.each this.listener.endpoints
+           (#-> (.send [type data])))))
+
+;; (def-generic start (network evaluator reader printer)
+
+;;   (.on network 'packet (send reader))
+;;   (.on reader 'expression (send compiler))
+;;   (.on compiler 'code (send evaluator))
+;;   (pipe (.on evaluator 'result (send stdout))
+;;         (.on 'error (send stderr))))
+
+(var network (.spawn Network))
+(define Server Actor
+
+  (init ((config (lit (port 8000)))
+         (repl ((create REPL)))))
+
+  (def-generic start (config repl)
+
+    (set this
+         'listener (.listen network config.port)
+         'responder ((create Responder) this.listener))
+
+    (.on listener 'message (#-> first repl.send))
+
+
+    ;; (.on  'log (=> (data) (.send responder ['log data])))
+
+    ;; (.on  'error (=> (err) (.send responder ['error err])))
+
+    ;; (.on  'result (=> (value) (.send responder ['result value])))
+
+    (pipe repl (.on 'message (send-to responder))))
+
+
+
+  (def stop ())
+  (def spawn ())
+  )
+
+(export Server)
+

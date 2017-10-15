@@ -1,0 +1,45 @@
+(namespace layer)
+
+
+(include "./meta")
+(import-namespace meta)
+(include "./interface")
+(import-namespace interface)
+
+(include "./actor")
+(import-namespace actor)
+
+
+(var curry R.curry)
+
+(def assign-handlers (layer  )
+  (=> (a i) (pipe a
+                  (.on 'message (send-to (get layer.members (+ i 1))))
+                  (bubble  layer 'error))))
+
+
+(define Layer Actor
+  (init ( members) (.call Actor.init this))
+
+  (def-generic start (members)
+    (fluently
+     (var last (last members)
+          inner (.slice members 0 -1))
+
+     (.for-each inner (assign-handlers this))
+
+     (bubble  last 'message this)))
+
+  (def of (types)
+
+    (var members (.map types (=> (t) ((create t)))))
+    (var layer ((create this) members))
+
+    (each types (t i)
+          (set layer t.symbol (get members i)))
+
+    (return layer))
+
+  (def-task send (d members)
+    (.send (first members) d)))
+

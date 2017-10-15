@@ -1,10 +1,4 @@
-(include "kit/header")
-(import-namespace kit)
-
-
-(include "../interface/index.sibilant")
-
-(import-namespace interface)
+(namespace event-emitter)
 
 (require! 'events)
 

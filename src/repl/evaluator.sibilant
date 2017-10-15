@@ -1,0 +1,35 @@
+
+(def-curried run-in (context string )
+  (.run-in-context vm  string context))
+
+(require! (lit inspect) 'util
+          'vm)
+(define Console Interface
+  (init (evaluator))
+
+  (extend console)
+
+  (def-generic log ((dots params))
+    (.emit this.evaluator 'message
+           ['log (pipe params (.map inspect) (.join " "))])))
+
+(def Object.copy (o) (mixin o {}))
+
+(define Evaluator Actor
+  ;;(init ((context (vm.create-context (mixin [global (lit (console ((create Console) this)))])))))
+
+  (init ((context (vm.create-context (.copy Object global))))
+        (.call Actor.init this))
+
+  (def-generic spawn () ((create this)))
+
+  (def-task send (js context)
+
+    ;;(emit 'message this)
+    ;;(emit 'error this)
+
+    (pipe (resolve js)
+          (.then  (run-in context))
+          (.then (=> (result) (.emit this 'message ['result result])))
+          (.catch (=> (err) (.emit this 'message ['error err]))))))
+(export Evaluator)

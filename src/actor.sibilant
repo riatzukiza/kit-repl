@@ -1,35 +1,14 @@
-(require! (lit Event-emitter) "events")
+(namespace actor)
+
+(load "./actor/meta" "./interface/meta")
+(import-namespace interface)
+
+(load  "./event-emitter" "./interface")
 
 (def resolve (v)  (.resolve Promise v))
 
-(macro def-actor (name args ...body)
-       `(def-interface @name @args
-          (extend Actor)
-          (init (.call Actor.init this))
-          ...@body))
-
-
-(def-interface Emitter ()
-
-  (extend Event-emitter.prototype)
-
-  (init (.call Event-emitter this)))
-
-(macro enque-task (p ...body)
-       `(assign @p (pipe @p
-                         (then-do  ...@body)
-                         (catch (.emit this 'error e)
-                           (throw e)))))
-
-(macro def-task (name args ...body)
-       `(def @name @args (enque-task this.promise ...@body)))
-
-(def-lit-macro def-task (name args ...body)
-  `(gmth @name @args
-         (enque-task this.promise ...@body)))
-
 (def-interface Actor ((promise (resolve)))
-  (extend Emitter )
+  (extend Event-emitter )
 
   (init (.call Emitter.init this)
         (.on this 'error (=> (e) (assign this.promise (resolve)))))
@@ -37,3 +16,5 @@
   (def send (msg)
     (enque-task this.promise
                 (.emit this 'message msg))))
+
+(export Actor)

@@ -1,0 +1,21 @@
+(namespace compiler)
+
+(load "../actor")
+
+(import-namespace meta)
+(import-namespace interface )
+
+(define Compiler Actor
+
+  (init () (.call Actor.init this))
+
+  (def-generic spawn ()
+    ((create this)))
+
+  (def-task send (data)
+    (pipe (resolve data)
+          (.then (#-> .to-string sibilant (get  'js )))
+          (.then (emit 'message this))
+          (.catch (emit 'error this)))))
+
+(export Compiler)

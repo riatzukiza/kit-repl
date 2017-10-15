@@ -1,0 +1,20 @@
+(namespace actor)
+
+(macro def-actor (name args ...body)
+       `(def-interface @name @args
+          (extend Actor)
+          (init (.call Actor.init this))
+          ...@body))
+
+(macro enque-task (p ...body)
+       `(assign @p (pipe @p
+                         (then-do  ...@body)
+                         (catch (.emit this 'error e)
+                           (throw e)))))
+
+(macro def-task (name args ...body)
+       `(def @name @args (enque-task this.promise ...@body)))
+
+(def-lit-macro def-task (name args ...body)
+  `(gmth @name @args
+         (enque-task this.promise ...@body)))

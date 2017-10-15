@@ -1,58 +1,29 @@
-(def-interface Message ())
+(namespace network)
 
-(def-actor Endpoint (socket network)
+(load "../src/actor/header")
 
-  (def-generic start (socket network)
-    (.on socket 'data
-         (=> (value)
-             (.emit this 'packet [value this])
-             (.emit network 'packet [value this]))))
+(import-namespace actor)
 
-  (def stop ())
+(load "./network/listener"  "./network/endpoint")
 
-  (def spawn (socket network)
-    (remember network.endpoints socket.remote-address
-              ((create this)
-               socket
-               network)))
-
-  (def-task send (msg socket network)
-    (make-promise
-     (.write socket msg success))))
-
-;; (def-interface Endpoint.Outbound (socket network)
-
-;;   (extend Endpoint)
-
-;;   (def spawn (socket network)
-;;     (remember network.endpoints socket.remote-address
-;;               ((create this)
-;;                socket
-;;                network)))
-
-;;   (def-task send (msg socket network)
-;;     (make-promise
-;;      (.write socket msg success))))
-
-(def-actor Network.Listener
-    (network
-     (endpoints (new Map))
-     (server (.create-server net )))
-
-  (def spawn ())
-  (def start ())
-  (def stop ()))
+(require! (lit Tree-map) "tree-kit")
 
 (def-actor Network
-    ((endpoints (new Map))
+
+    ((endpoints ((create Tree-map)))
      (listeners (new Map)))
 
   (def-task send ((lit address
                        port
-                       message)
+                       data)
                   endpoints)
 
-    (remember sockets address (.connect net port address)))
+    (pipe (remember endpoints [address port]
+                    (.connect net port address))
+
+          (Endpoint.spawn network)
+
+          (.send  data)))
 
   (def-task listen (port))
 
@@ -60,13 +31,8 @@
 
   (def despawn ())
 
-  (def-generic start (port listener)
+  (def-generic start (port listener))
 
-    (fluently
-     (pipe listener
-           (.on 'connect  (#-> (Endpoint.spawn this)))
-           (.listen (lit port)
-                    (-> (.emit this 'start))))) )
+  (def-generic stop (listener)))
 
-  (def-generic stop (listener)
-    (fluently (.close listener (-> (.emit this 'close))))))
+(export Network)

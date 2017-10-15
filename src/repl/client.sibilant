@@ -1,0 +1,15 @@
+(namespace repl)
+
+(require! 'readline
+          'net)
+
+(define Client Actor
+
+  (init (reciever))
+
+  (def-generic start (reciever))
+
+  (def-task send (fragment endpoint)
+    (.send endpoint fragment)))
+
+(export Client)
