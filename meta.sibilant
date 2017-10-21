@@ -1,23 +1,35 @@
+(namespace meta)
+
+(macro token-of (node) `(get @node 'token))
+
+(macro loose-var (...body)
+       (bulk-map body (=> (name value )
+                          (if (.includes name.token ".")
+                              `(assign @name @value)
+                              `(var @name @value)))))
+(macro add-to-module-lookup (path)
+       `(let ( (p "/") (inc @ (or path (process.cwd))))
+          (require! 'path)
+          (assign module.paths
+                  [...module.paths
+                   ...(pipe
+                       (.split inc path.sep)
+                       (.map (=> (el)
+                                 (var r (path.join p "node_modules"))
+                                 (assign p (path.join p el))
+                                 r))
+                       (.filter (=> (e) (not (.includes module.paths e))))
+                       )])
+          null))
+
+(macro clear-source-cache (...paths)
+       (map paths (p) (delete (get sibilant.source-cache p)))
+       null)
 (meta
+ (namespace meta)
+ (require! Path 'path)
  (var modules (new Set))
 
- (macro add-to-module-lookup (path)
-        `(let ( (p "/") (inc @ (or path (process.cwd))))
-           (require! 'path)
-           (assign module.paths
-                   [...module.paths
-                    ...(pipe
-                        (.split inc path.sep)
-                        (.map (=> (el)
-                                  (var r (path.join p "node_modules"))
-                                  (assign p (path.join p el))
-                                  r))
-                        (.filter (=> (e) (not (.includes module.paths e))))
-                        )])
-           null))
-
- (macro clear-source-cache (...paths) (map paths (p) (delete (get sibilant.source-cache p)))
-        null)
  (def macros.unload (...paths)
    (pipe paths
          (.map (=> (p) [p (eval p.token)]))
@@ -34,9 +46,11 @@
    (.map paths (#-> (tap macros.unload)
                     macros.load)))
 
+
  (def macros.load (...paths)
    (pipe paths
-         (.map (=> (p) [p (eval p.token)]))
+         (.map (=> (p) [p (pipe (Path.join sibilant.dir (eval (token-of p)))
+                                Path.resolve )]))
 
          (.filter (=> ([p path]) (pipe path modules.has not )))
 

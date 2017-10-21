@@ -1,4 +1,10 @@
 
+(load "kit-interface/header"
+      "../actor/meta")
+
+(import-namespace actor)
+(import-namespace interface)
+
 (def-curried run-in (context string )
   (.run-in-context vm  string context))
 
@@ -16,20 +22,17 @@
 (def Object.copy (o) (mixin o {}))
 
 (define Evaluator Actor
-  ;;(init ((context (vm.create-context (mixin [global (lit (console ((create Console) this)))])))))
 
   (init ((context (vm.create-context (.copy Object global))))
         (.call Actor.init this))
 
   (def-generic spawn () ((create this)))
 
-  (def-task send (js context)
+  )
+(def-task Evaluator.send (js context)
 
-    ;;(emit 'message this)
-    ;;(emit 'error this)
-
-    (pipe (resolve js)
-          (.then  (run-in context))
-          (.then (=> (result) (.emit this 'message ['result result])))
-          (.catch (=> (err) (.emit this 'message ['error err]))))))
+  (pipe (resolve js)
+        (.then  (run-in context))
+        (.then (=> (result) (.emit this 'message ['result result])))
+        (.catch (=> (err) (.emit this 'message ['error err])))))
 (export Evaluator)

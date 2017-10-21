@@ -1,5 +1,5 @@
 (namespace actor)
-
+(meta (print "actor meta file"))
 (macro def-actor (name args ...body)
        `(def-interface @name @args
           (extend Actor)
@@ -13,7 +13,7 @@
                            (throw e)))))
 
 (macro def-task (name args ...body)
-       `(def @name @args (enque-task this.promise ...@body)))
+       `(def-generic @name @args (enque-task this.promise ...@body)))
 
 (def-lit-macro def-task (name args ...body)
   `(gmth @name @args

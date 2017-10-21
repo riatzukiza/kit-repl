@@ -1,10 +1,10 @@
-(namespace reader)
+(load "../actor")
+(import-namespace actor)
 
 (def scanning? (parser) (not (or parser.in-quote parser.comment)))
 
 (var readers
      (lit
-
       ("\"" (lambda (c) (assign this.in-quote (not this.in-quote)) c))
       (";" (lambda (c) (assign this.comment true) ""))))
 
@@ -45,39 +45,38 @@
 
     (var lines (.split string "\n"))
 
-    (each lines (l) (.handle-line this l)))
+    (each lines (l) (.handle-line this l))))
+(def-task Reader.handle-line (line )
 
-  (def-task handle-line (line )
+  (var looping true i 0)
+  (var chars (.split line ""))
 
-    (var looping true i 0)
-    (var chars (.split line ""))
+  (assign this.comment false)
 
-    (assign this.comment false)
+  (while (and looping (not this.comment))
+    (var char (get chars (incr i)))
 
-    (while (and looping (not this.comment))
-      (var char (get chars (incr i)))
+    (if (get readers char)
+        (assign char (.call (get readers char ) this char chars i)))
 
-      (if (get readers char)
-          (assign char (.call (get readers char ) this char chars i)))
+    (when looping
 
-      (when looping
+      (.push this.fragment char)
 
-        (.push this.fragment char)
+      (when (and (not this.parens)
+                 (not this.curly-braces)
+                 (not this.square-braces))
 
-        (when (and (not this.parens)
-                   (not this.curly-braces)
-                   (not this.square-braces))
+        (var s (pipe (.join this.fragment "")
+                     .trim ))
 
-          (var s (pipe (.join this.fragment "")
-                       .trim ))
+        (if (not (= s.length 0))
+            (.emit this 'message s))
 
-          (if (not (= s.length 0))
-              (.emit this 'message s))
+        (assign this.fragment []))
 
-          (assign this.fragment []))
-
-        (if (>= i chars.length)
-            (assign looping false))))
-    (.push this.fragment "\n")))
+      (if (>= i chars.length)
+          (assign looping false))))
+  (.push this.fragment "\n"))
 
 (export Reader)

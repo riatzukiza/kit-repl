@@ -1,0 +1,34 @@
+(namespace server)
+
+(include "../src/meta")
+
+(import-namespace meta)
+
+(reload "../src/interface"
+        "../src/repl/compiler"
+        "../src/repl/reader"
+        "../src/repl/evaluator"
+        "../src/layer"
+        )
+
+(var REPL (Layer.of [Reader Compiler Evaluator]))
+
+
+(let ((server ((create Server)))
+      (client ((create Client))))
+
+  (pipe server (.on  'start (-> (.start client 8199))))
+  (pipe client
+        (.on  'start (-> (.send client "(print 'yo)")
+                         (.send client "(print fail.booze)")))
+        (.on  'log (aprint "log:"))
+        (.on  'result (aprint "result:"))
+        (.on  'exception (aprint "exception:")))
+
+  (.start  server 8199))
+
+
+
+
+
+

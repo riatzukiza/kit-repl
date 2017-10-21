@@ -1,7 +1,18 @@
-(const PORT 8199)
-(var network (pipe Network .spawn .start
+(namespace network)
 
+(include "../meta.sibilant")
+
+(const PORT 8199)
+(reload "../src/interface"
+        "../src/network"
+        )
+
+(var network (pipe Network .spawn
                    (.listen PORT)
-                   (.on 'packet (=> ([data endpoint])))))
-(.send network ['localhost 'hi])
+                   (.on 'packet (aprint "recieved"))))
+
+(then-pipe (.send network (lit (address 'localhost)
+                               (port PORT)
+                               (data "hello")))
+           (aprint "sent"))
 

@@ -1,45 +1,39 @@
-(namespace layer)
-
-
-(include "./meta")
-(import-namespace meta)
-(include "./interface")
+(load "kit-interface/header" "./actor")
 (import-namespace interface)
-
-(include "./actor")
 (import-namespace actor)
-
 
 (var curry R.curry)
 
-(def assign-handlers (layer  )
-  (=> (a i) (pipe a
-                  (.on 'message (send-to (get layer.members (+ i 1))))
-                  (bubble  layer 'error))))
-
+(def assign-handlers (layer))
 
 (define Layer Actor
-  (init ( members) (.call Actor.init this))
 
+  (init ( types (members (.map types (=> (t) ((create t))))))
+        (each types (t i) (set this t.symbol (get members i)))
+        (.call Actor.init this))
+
+  (gett assign-handlers
+        (=> (a i)
+            (var members this.members)
+            (pipe a
+                  (.on 'message (R.pipe
+                                 (aprint "message from" a.symbol )
+                                 (aprint "sending to" (get members (+ i 1) 'symbol))
+                                 (send-to (get this.members (+ i 1)))))
+                  (bubble  this 'error))))
   (def-generic start (members)
+
     (fluently
+
      (var last (last members)
           inner (.slice members 0 -1))
 
-     (.for-each inner (assign-handlers this))
+     (.for-each inner this.assign-handlers)
 
-     (bubble  last 'message this)))
+     (bubble  last this 'message )))
 
-  (def of (types)
+  (def of (types) (extend this (lit types))))
 
-    (var members (.map types (=> (t) ((create t)))))
-    (var layer ((create this) members))
-
-    (each types (t i)
-          (set layer t.symbol (get members i)))
-
-    (return layer))
-
-  (def-task send (d members)
-    (.send (first members) d)))
+(def-task Layer.send (d members)
+  (.send (first members) d))
 

@@ -1,16 +1,24 @@
 (namespace actor)
+(load "kit-interface/header"
+      "./event-emitter"
+      "./actor/meta"
+      )
 
-(load "./actor/meta" "./interface/meta")
+(def-lit-macro def-task (name args ...body)
+  `(gmth @name @args
+         (enque-task this.promise ...@body)))
+
 (import-namespace interface)
-
-(load  "./event-emitter" "./interface")
 
 (def resolve (v)  (.resolve Promise v))
 
-(def-interface Actor ((promise (resolve)))
-  (extend Event-emitter )
+(def-curried send-to ( actor msg)
+  (.send actor msg))
 
-  (init (.call Emitter.init this)
+(define Actor Event-emitter
+
+  (init ((promise (resolve)))
+        (.call Event-emitter.init this)
         (.on this 'error (=> (e) (assign this.promise (resolve)))))
 
   (def send (msg)

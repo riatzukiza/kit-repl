@@ -28,6 +28,7 @@
       (collect m (extend  *ext (mixin  [ (lit name (symbol *symbol))
                                          (dots *shares) ]
                                        *obj))
+               (.call Interface.init m)
 
                (set *symbols name *symbol)
                (set *types  *symbol m)
