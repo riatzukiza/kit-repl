@@ -17,8 +17,6 @@
             (var members this.members)
             (pipe a
                   (.on 'message (R.pipe
-                                 (aprint "message from" a.symbol )
-                                 (aprint "sending to" (get members (+ i 1) 'symbol))
                                  (send-to (get this.members (+ i 1)))))
                   (bubble  this 'error))))
   (def-generic start (members)
