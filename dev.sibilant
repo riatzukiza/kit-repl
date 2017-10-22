@@ -9,9 +9,9 @@
   (pipe (load-json "./package.json")
         (.then (=> (json)
                    (print "before" json)
-                   (assign json.version (pipe (.split json.version ".")
-                                              (tap last incr )
-                                              (.join ".")))
+                   (var current-version (.split json.version "."))
+                   (incr (last current-version))
+                   (assign json.version (.join current-version))
                    (print "after" json)
                    (save-json "./package.json" json)))
 
