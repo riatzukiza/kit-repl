@@ -3,7 +3,7 @@
 (include "../meta.sibilant")
 
 (const PORT 8199)
-(reload "../src/interface"
+(load "kit-interface/header"
         "../src/network"
         )
 
