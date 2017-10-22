@@ -8,14 +8,13 @@
 (def save-patch (message)
   (pipe (load-json "./package.json")
         (.then (=> (json)
-                   (assign json.version (pipe (.split json.version ".")
-                                              (tap last (+ 1))))
+                   (print "package.json" json)
+                   (++ (last json.version))
                    (save-json "./package.json" json)))
 
         (.then (=> (pkg)
                    (then-do (commit ("patched " pkg.name " to " pkg.version))
-                            pkg)))
-        (.then (-> (shell (cp "-a" "./" ("../"pkg.name"-"pkg.version)))))))
+                            (shell (cp "-a" "./" ("../"pkg.name"-"pkg.version))))))))
 
 (def-promised save-json (path d)
   (.write-file (require 'fs) path (.stringify JSON d)
