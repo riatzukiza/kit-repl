@@ -19,7 +19,7 @@ p
                    (var commit-type (get this.num-names signifigance))
                    (assign (get current-version commit-type)
                            (+ 1 (parse-int (last current-version) 10)))
-                   (for (i (+ commit-type) ) (<= i 2) (++ i)
+                   (for (i (+ commit-type 1) ) (<= i 2) (++ i)
                         (set current-version i 0))
 
                    (assign json.version (.join current-version "."))
