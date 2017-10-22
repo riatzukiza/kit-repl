@@ -19,7 +19,7 @@
         (.then (=> (pkg)
                    (then-do (commit ("patched " pkg.name " to " pkg.version ":" message))
                             (print "copying to patch own folder")
-                            (shell (cp "-a" "./" ("../"pkg.name"-"pkg.version))))))))
+                            (shell (cp "-a" "./" ("./"pkg.name"-"pkg.version))))))))
 
 (def-promised save-json (path d)
   (.write-file (require 'fs) path (.stringify JSON d)
