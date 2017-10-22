@@ -8,8 +8,10 @@
 (def save-patch (message)
   (pipe (load-json "./package.json")
         (.then (=> (json)
-                   (print "package.json" json)
-                   (++ (last json.version))
+                   (print json)
+                   (assign json.version (pipe (.split json.version ".")
+                                              (tap last (+ 1))
+                                              (.join ".")))
                    (save-json "./package.json" json)))
 
         (.then (=> (pkg)
