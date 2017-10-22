@@ -3,21 +3,31 @@
 (include "kit/inc/shell")
 (import-namespace shell)
 
+p
+(get current-version (get this.num-names signifigance))
 (def commit (message) (shell (git add ".") (git commit "-m" ("\""message "\""))))
 
-(def save-patch (message)
+(var sem-ver {num-names {patch 2 minor 1 major 0}})
+
+(def-generic sem-ver.save (message signifigance)
   (pipe (load-json "./package.json")
         (.then (=> (json)
                    (print "before" json)
                    (var current-version (.split json.version "."))
                    (print "current version" current-version)
-                   (assign (third current-version) (+ 1 (parse-int (last current-version) 10)))
+
+                   (var commit-type (get this.num-names signifigance))
+                   (assign (get current-version commit-type)
+                           (+ 1 (parse-int (last current-version) 10)))
+                   (for (i (+ commit-type) ) (< i 2) (++ i)
+                        (set current-version i 0))
+
                    (assign json.version (.join current-version "."))
                    (print "after" json)
                    (save-json "./package.json" json)))
 
         (.then (=> (pkg)
-                   (then-do (commit ("patched " pkg.name " to " pkg.version ":" message))
+                   (then-do (commit ("" signifigance "update" pkg.name " to " pkg.version ":" message))
                             (print "copying to patch own folder")
                             (shell (cp "-a" "./" ("../"pkg.name"-"pkg.version))))))))
 

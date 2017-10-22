@@ -21,8 +21,7 @@
         (.call Event-emitter.init this)
         (.on this 'error (=> (e) (assign this.promise (resolve)))))
 
-  (def send (msg)
-    (enque-task this.promise
-                (.emit this 'message msg))))
+  (def *send (msg) (.emit this 'message msg))
+  (def send (msg) (enque-task this.promise (.*send this msg))))
 
 (export Actor)

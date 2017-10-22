@@ -12,8 +12,16 @@
 
 (define Network Actor
 
-  (endpoints ((create Tree-map)))
-  (listeners (new Map))
+
+
+  (def build ()
+
+    (.call Actor.init this)
+
+    (set this
+         'endpoints ((create Tree-map))
+         'listeners (new Map)))
+
 
   (def-task listen (port))
 
@@ -23,18 +31,20 @@
 
   (def-generic start (port listener))
 
-  (def-generic stop (listener)))
+  (def-generic stop (listener))
+  (def-generic *send ((lit address
+                                  port
+                                  data)
+                             endpoints)
 
-(def-task Network.send ((lit address
-                             port
-                             data)
-                        endpoints)
+    (pipe (remember endpoints [address port]
+                    (.connect net port address))
 
-  (pipe (remember endpoints [address port]
-                  (.connect net port address))
+          (Endpoint.spawn network)
 
-        (Endpoint.spawn network)
+          (.send  data)))
+  )
 
-        (.send  data)))
+
 
 (export Network)
