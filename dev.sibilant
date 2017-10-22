@@ -17,7 +17,7 @@
                    (save-json "./package.json" json)))
 
         (.then (=> (pkg)
-                   (commit ("patched " pkg.name " to " pkg.version))))))
+                   (commit ("patched " pkg.name " to " pkg.version ":" message))))))
 
 (def-promised save-json (path d)
   (.write-file (require 'fs) path (.stringify JSON d)
