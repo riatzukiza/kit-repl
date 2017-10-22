@@ -7,19 +7,21 @@
 (import-namespace meta)
 
 (var curry R.curry)
-
-(include "./interface"
-        "./repl/compiler"
-        "./repl/reader"
-        "./repl/evaluator"
-        "./layer"
-        )
+(load "interface/header")
+(load "./repl/compiler"
+      "./repl/reader"
+      "./repl/evaluator"
+      "./layer"
+      )
 
 (macro gets (obj interface) `(get @obj (get @interface 'symbol)))
 
 (define REPL (Layer.of [Reader Compiler Evaluator])
   (init ()
-        (pipe this
-              (tap (gets  Reader)
-                   (.on  'message (=> (lisp) (.emit this 'lisp lisp))))
-              (.on  'message (=> ([type value]) (.emit this type value))))))
+        (.call Layer.init this)
+        (.on this 'message (=> ([type value]) (.emit this type value)))))
+
+;; (define Server Interface
+;;   (init (port (listener (.s)))))
+
+(export REPL)

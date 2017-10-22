@@ -1,29 +1,19 @@
 (namespace network)
 
-(load "../src/actor/header")
+(load "../actor")
 
 (import-namespace actor)
 
 (load "./network/listener"  "./network/endpoint")
 
 (require! (lit Tree-map) "tree-kit")
+(define Responder Actor )
+(define Reciever Actor )
 
-(def-actor Network
+(define Network Actor
 
-    ((endpoints ((create Tree-map)))
-     (listeners (new Map)))
-
-  (def-task send ((lit address
-                       port
-                       data)
-                  endpoints)
-
-    (pipe (remember endpoints [address port]
-                    (.connect net port address))
-
-          (Endpoint.spawn network)
-
-          (.send  data)))
+  (endpoints ((create Tree-map)))
+  (listeners (new Map))
 
   (def-task listen (port))
 
@@ -34,5 +24,17 @@
   (def-generic start (port listener))
 
   (def-generic stop (listener)))
+
+(def-task Network.send ((lit address
+                             port
+                             data)
+                        endpoints)
+
+  (pipe (remember endpoints [address port]
+                  (.connect net port address))
+
+        (Endpoint.spawn network)
+
+        (.send  data)))
 
 (export Network)
