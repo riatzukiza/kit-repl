@@ -11,8 +11,8 @@
                    (print "before" json)
                    (var current-version (.split json.version "."))
                    (print "current version" current-version)
-                   (assign (last current-version) (+ 1 (last current-version)))
-                   (assign json.version (.join current-version))
+                   (assign (third current-version) (+ 1 (last current-version)))
+                   (assign json.version (.join current-version "."))
                    (print "after" json)
                    (save-json "./package.json" json)))
 
