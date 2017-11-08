@@ -16,7 +16,7 @@
 (def-task Compiler.send (data)
   (pipe (resolve data)
         (.then (#-> .to-string sibilant (get  'js )))
-        (.then (emit 'message this))
+        (.then (R.tap (emit 'message this)))
         (.catch (emit 'error this))))
 
 (export Compiler)

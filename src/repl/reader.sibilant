@@ -6,7 +6,9 @@
 (var readers
      (lit
       ("\"" (lambda (c) (assign this.in-quote (not this.in-quote)) c))
-      (";" (lambda (c) (assign this.comment true) ""))))
+      (";" (lambda (c) (if this.in-quote c
+                           (do (assign this.comment true)
+                               "")) ))))
 
 (macro reader-macro (name ...body)
        `(set readers @name

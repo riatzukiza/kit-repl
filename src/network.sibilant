@@ -42,9 +42,7 @@
 
           (Endpoint.spawn network)
 
-          (.send  data)))
-  )
-
+          (.send  data)))) 
 
 
 (export Network)

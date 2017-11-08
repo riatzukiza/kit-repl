@@ -154,11 +154,16 @@ var Actor = EventEmitter.define("Actor", {
       return this;
     
    },
+  _send( msg ){ 
+    
+      return this.emit("message", msg);
+    
+   },
   send( msg ){ 
     
       return this.promise = this.promise.then(((nil) => {
       	
-        return this.emit("message", msg);
+        return this._send(msg);
       
       })).catch(((e) => {
       	
@@ -193,7 +198,7 @@ Compiler.send = (function Compiler$send$(data = this.data) {
       /* src/repl/compiler.sibilant:18:15 */
     
       return sibilant(arguments[0].toString()).js;
-    })).then(emit("message", this)).catch(emit("error", this));
+    })).then(R.tap(emit("message", this))).catch(emit("error", this));
   
   })).catch(((e) => {
   	
