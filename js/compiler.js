@@ -108,11 +108,15 @@ var {
   Interface
  } = require("kit-interface");
 var { 
-  Actor
+  Actor,
+  sendTo
  } = require("kit-actor");
 var { 
-  EventEmitter
+  EventEmitter,
+  emit,
+  bubble
  } = require("kit-events");
+var sibilant = require("sibilant");
 var Compiler = Actor.define("Compiler", { 
   init(  ){ 
     
@@ -123,8 +127,8 @@ var Compiler = Actor.define("Compiler", {
    },
   _send( data = this.data ){ 
     
-      return resolve(data).then((function() {
-        /* src/compiler.sibilant:25:17 */
+      return Promise.resolve(data).then((function() {
+        /* src/compiler.sibilant:26:17 */
       
         return sibilant(arguments[0].toString()).js;
       })).then(R.tap(emit("message", this))).catch(emit("error", this));

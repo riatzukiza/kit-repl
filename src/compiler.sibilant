@@ -16,12 +16,13 @@
 
 (include "kit-events/header")
 (import-namespace events)
+(require! 'sibilant)
 
 (define Compiler Actor
 
   (init () (.call Actor.init this))
   (def-generic *send (data)
-    (pipe (resolve data)
+    (pipe (Promise.resolve data)
           (.then (#-> .to-string sibilant (get  'js )))
           (.then (R.tap (emit 'message this)))
           (.catch (emit 'error this))))

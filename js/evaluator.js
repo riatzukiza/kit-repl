@@ -108,10 +108,13 @@ var {
   Interface
  } = require("kit-interface");
 var { 
-  Actor
+  Actor,
+  sendTo
  } = require("kit-actor");
 var { 
-  EventEmitter
+  EventEmitter,
+  emit,
+  bubble
  } = require("kit-events");
 var runIn = R.curry(((context, string) => {
 	
@@ -156,7 +159,7 @@ var Evaluator = Actor.define("Evaluator", {
    },
   _send( js = this.js,context = this.context ){ 
     
-      return resolve(js).then(runIn(context)).then(((result) => {
+      return Promise.resolve(js).then(runIn(context)).then(((result) => {
       	
         return this.emit("message", [ "result", result ]);
       

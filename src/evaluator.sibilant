@@ -45,7 +45,7 @@
   (def-generic spawn () ((create this)))
   (def-generic *send (js context)
 
-    (pipe (resolve js)
+    (pipe (Promise.resolve js)
           (.then  (run-in context))
           (.then (=> (result) (.emit this 'message ['result result])))
           (.catch (=> (err) (.emit this 'message ['error err])))))

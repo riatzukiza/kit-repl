@@ -52,10 +52,13 @@ var {
   partiallyApplyAfter
  } = require("kit/js/util");
 var { 
-  Actor
+  Actor,
+  sendTo
  } = require("kit-actor");
 var { 
-  EventEmitter
+  EventEmitter,
+  emit,
+  bubble
  } = require("kit-events");
 
 
