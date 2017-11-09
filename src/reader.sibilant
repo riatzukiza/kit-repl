@@ -1,14 +1,19 @@
+(namespace repl)
+
+(include "kit/header")
+(import-namespace kit)
+
+(include "../meta")
 (import-namespace meta)
 
-(include "kit-interface/header")
 
+
+(load "kit-actor/header")
+
+(load "kit-events/header")
+
+(load "kit-interface/header")
 (import-namespace interface )
-
-(include "kit-actor/header")
-(import-namespace actor)
-
-(include "kit-events/header")
-(import-namespace events)
 
 (def scanning? (parser) (not (or parser.in-quote parser.comment)))
 

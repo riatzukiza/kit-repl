@@ -1,3 +1,10 @@
+
+(namespace repl)
+
+(include "kit/header")
+(import-namespace kit)
+
+(include "../meta")
 (import-namespace meta)
 
 (include "kit-interface/header")

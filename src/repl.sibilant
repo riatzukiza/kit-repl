@@ -1,17 +1,14 @@
 (namespace repl)
 
-(meta (var print console.log.bind(console) )(print "loading kit"))
 (include "kit/header")
 (import-namespace kit)
 
-(meta (print "loading ../meta"))
 (include "../meta")
 (import-namespace meta)
 
 (var curry R.curry)
-(meta (print "loading kit-interface"))
 (load "kit-interface/header")
-(meta (print "finishing"))
+(import-namespace interface)
 (require! (lit Compiler) "./compiler"
           (lit Reader) "./reader"
           (lit Evaluator) "./evaluator"
