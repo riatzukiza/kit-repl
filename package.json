@@ -1,15 +1,29 @@
-{"name":"kit-repl",
- "version":"1.3.1","description":"A networked repl for an extension of sibilant I call kit.","main":"index.js",
- "dependencies":{"sibilant":"git+ssh://riatzukiza@192.168.0.150:1250/H/gits/sibilant",
-                 "tree-kit":"git+ssh://riatzukiza@192.168.0.150:1250/H/gits/tree-kit",
-                 "kit":"git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit",
-                 "kit-interface":"git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-interface"},
- "devDependencies":{},
- "scripts":{"local":"sibilant -x cli.sibilant",
-            "compile":"sibilant ./src/index.sibilant -o ./"},
- "repository":{"type":"git",
-               "url":"git+ssh://git@bitbucket.org/aaron_beavers/kit-repl.git"},
- "keywords":["cli","sibilant","lisp"],
- "author":"Aaron Beavers",
- "license":"ISC",
- "homepage":"https://bitbucket.org/aaron_beavers/kit-repl#readme"}
+{
+	"name": "kit-repl",
+	"version": "1.3.1",
+	"description": "A networked repl for an extension of sibilant I call kit.",
+	"main": "index.js",
+	"dependencies": {
+		"sibilant": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/sibilant",
+		"tree-kit": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/tree-kit",
+		"kit": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit",
+		"kit-interface": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-interface"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"local": "sibilant -x cli.sibilant",
+		"compile": "sibilant ./src/index.sibilant -o ./"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@bitbucket.org/aaron_beavers/kit-repl.git"
+	},
+	"keywords": [
+		"cli",
+		"sibilant",
+		"lisp"
+	],
+	"author": "Aaron Beavers",
+	"license": "ISC",
+	"homepage": "https://bitbucket.org/aaron_beavers/kit-repl#readme"
+}
