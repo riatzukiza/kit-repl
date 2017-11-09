@@ -1,2 +1,0 @@
-(include "./meta")
-(require! (lit Interface) "./interface")

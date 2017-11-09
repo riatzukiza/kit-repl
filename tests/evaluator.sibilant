@@ -23,5 +23,6 @@
   (.on repl 'result (aprint "return from repl"))
 
   (.send repl "(print 'yo)")
-  (.send repl "(+ 2 2)"))
+  (.send repl "(+ 2 2)")
+  (.send repl "(print \"a string with a ; in it\")"))
 

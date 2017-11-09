@@ -1,0 +1,26 @@
+(import-namespace meta)
+
+(include "kit-interface/header")
+
+(import-namespace interface )
+
+(include "kit-actor/header")
+(import-namespace actor)
+
+(include "kit-events/header")
+(import-namespace events)
+
+(define Compiler Actor
+
+  (init () (.call Actor.init this))
+  (def-generic *send (data)
+    (pipe (resolve data)
+          (.then (#-> .to-string sibilant (get  'js )))
+          (.then (R.tap (emit 'message this)))
+          (.catch (emit 'error this))))
+  (def-generic spawn ()
+    ((create this))))
+
+
+
+(export Compiler)

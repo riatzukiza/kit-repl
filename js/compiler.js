@@ -60,19 +60,9 @@ var {
 var { 
   EventEmitter
  } = require("kit-events");
-var curry = R.curry;
-var assignHandlers = (function assignHandlers$(layer) {
-  /* assign-handlers src/layer.sibilant:15:0 */
+define(Compiler, Actor, init(null, Actor.init.call(this)), defGeneric(_send, data(), resolve(data).then((function() {
+  /* src/compiler.sibilant:18:17 */
 
-  
-});
-define(Layer, Actor, init(types(members(types.map(=>(t(), create(t)())))), t(i).forEach((function(types) {
-  /* src/layer.sibilant:20:8 */
-
-  return this[t.symbol] = members[i];
-})), Actor.init.call(this)), gett(assignHandlers, =>(a(i), var members = this.members;, bubble(a.on("message", R.pipe(sendTo(this.members[(i + 1)]))), this, "error"))), defGeneric(_send, d(members), members[0].send(d)), defGeneric(start, members(), fluently(var last = members.slice(-1)[0],
-    inner = members.slice(0, -1);, inner.forEach(this.assignHandlers), bubble(last, this, "message"))), var of = (function of$(types) {
-  /* of src/layer.sibilant:45:2 */
-
-  return extend(this, lit(types));
-}););
+  return sibilant(arguments[0].toString()).js;
+})).then(R.tap(emit("message", this))).catch(emit("error", this))), defGeneric(spawn, null, create(this)()));
+exports.Compiler = Compiler;

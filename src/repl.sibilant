@@ -1,18 +1,22 @@
 (namespace repl)
 
+(meta (var print console.log.bind(console) )(print "loading kit"))
 (include "kit/header")
 (import-namespace kit)
 
-(include "./meta")
+(meta (print "loading ../meta"))
+(include "../meta")
 (import-namespace meta)
 
 (var curry R.curry)
+(meta (print "loading kit-interface"))
 (load "kit-interface/header")
-(load "./repl/compiler"
-      "./repl/reader"
-      "./repl/evaluator"
-      "./layer"
-      )
+(meta (print "finishing"))
+(require! (lit Compiler) "./compiler"
+          (lit Reader) "./reader"
+          (lit Evaluator) "./evaluator"
+          (lit Layer) "./layer")
+
 
 (macro gets (obj interface) `(get @obj (get @interface 'symbol)))
 

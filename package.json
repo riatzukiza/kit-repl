@@ -7,6 +7,10 @@
 		"sibilant": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/sibilant",
 		"tree-kit": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/tree-kit",
 		"kit": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit",
+
+		"kit-actor": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-actor",
+
+		"kit-events": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-events",
 		"kit-interface": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-interface"
 	},
 	"devDependencies": {},

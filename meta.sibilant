@@ -1,5 +1,7 @@
 (namespace meta)
 
+(macro fluently (...body) `(scoped ...@body this))
+
 (macro token-of (node) `(get @node 'token))
 
 (macro loose-var (...body)

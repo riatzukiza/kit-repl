@@ -60,19 +60,14 @@ var {
 var { 
   EventEmitter
  } = require("kit-events");
-var curry = R.curry;
-var assignHandlers = (function assignHandlers$(layer) {
-  /* assign-handlers src/layer.sibilant:15:0 */
+defCurried(runIn, context(string), vm.runInContext(string, context));
+var lit(inspect) = require("util"),
+    vm = require("vm");
+define(Console, Interface, init(evaluator()), extend(console), defGeneric(log, params(), this.evaluator.emit("message", [ "log", params.map(inspect).join(" ") ])));
+Object.copy = (function Object$copy$(o) {
+  /* Object.copy src/evaluator.sibilant:31:0 */
 
-  
+  return mixin(o, {  });
 });
-define(Layer, Actor, init(types(members(types.map(=>(t(), create(t)())))), t(i).forEach((function(types) {
-  /* src/layer.sibilant:20:8 */
-
-  return this[t.symbol] = members[i];
-})), Actor.init.call(this)), gett(assignHandlers, =>(a(i), var members = this.members;, bubble(a.on("message", R.pipe(sendTo(this.members[(i + 1)]))), this, "error"))), defGeneric(_send, d(members), members[0].send(d)), defGeneric(start, members(), fluently(var last = members.slice(-1)[0],
-    inner = members.slice(0, -1);, inner.forEach(this.assignHandlers), bubble(last, this, "message"))), var of = (function of$(types) {
-  /* of src/layer.sibilant:45:2 */
-
-  return extend(this, lit(types));
-}););
+define(Evaluator, Actor, init(context(vm.createContext(Object.copy(global)))(), Actor.init.call(this)), defGeneric(spawn, null, create(this)()), defGeneric(_send, js(context), resolve(js).then(runIn(context)).then(=>(result(), this.emit("message", [ "result", result ]))).catch(=>(err(), this.emit("message", [ "error", err ])))));
+exports.Evaluator = Evaluator;

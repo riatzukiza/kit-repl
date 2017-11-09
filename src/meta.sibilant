@@ -1,7 +1,0 @@
-(namespace meta)
-
-(include "../meta")
-
-(macro fluently (...body) `(scoped ...@body this))
-
-

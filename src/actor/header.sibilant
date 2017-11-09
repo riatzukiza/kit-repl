@@ -1,4 +1,0 @@
-(namespace actor)
-(reload "./meta")
-
-(require! (lit Actor) "./actor")

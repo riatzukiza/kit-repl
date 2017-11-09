@@ -1,6 +1,14 @@
-(load "kit-interface/header" "./actor")
-(import-namespace interface)
+(import-namespace meta)
+
+(include "kit-interface/header")
+
+(import-namespace interface )
+
+(include "kit-actor/header")
 (import-namespace actor)
+
+(include "kit-events/header")
+(import-namespace events)
 
 (var curry R.curry)
 
@@ -19,6 +27,10 @@
                   (.on 'message (R.pipe
                                  (send-to (get this.members (+ i 1)))))
                   (bubble  this 'error))))
+
+  (def-generic *send (d members)
+    (.send (first members) d))
+
   (def-generic start (members)
 
     (fluently
@@ -32,6 +44,5 @@
 
   (def of (types) (extend this (lit types))))
 
-(def-task Layer.send (d members)
-  (.send (first members) d))
+
 
