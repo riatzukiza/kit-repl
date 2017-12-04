@@ -4,14 +4,14 @@
 	"description": "A networked repl for an extension of sibilant I call kit.",
 	"main": "index.js",
 	"dependencies": {
-		"sibilant": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/sibilant",
-		"tree-kit": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/tree-kit",
-		"kit": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit",
+		"sibilant": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/sibilant",
+		"tree-kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/tree-kit",
+		"kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit",
 
-		"kit-actor": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-actor",
+		"kit-actor": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-actor",
 
-		"kit-events": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-events",
-		"kit-interface": "git+ssh://riatzukiza@192.168.0.150:1250/H/gits/kit-interface"
+		"kit-events": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-events",
+		"kit-interface": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-interface"
 	},
 	"devDependencies": {},
 	"scripts": {
