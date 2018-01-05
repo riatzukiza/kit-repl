@@ -46,10 +46,8 @@
   (def-generic *send (js context)
 
     (pipe (Promise.resolve js)
-          (.then  (run-in context))
+          (.then  (run-in context "kit"))
           (.then (=> (result) (.emit this 'message ['result result])))
-          (.catch (=> (err) (.emit this 'message ['error err])))))
-
-  )
+          (.catch (=> (err) (.emit this 'message ['error err]))))))
 
 (export Evaluator)

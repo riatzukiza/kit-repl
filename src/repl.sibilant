@@ -26,3 +26,7 @@
 ;;   (init (port (listener (.s)))))
 
 (export REPL)
+(export Compiler)
+(export Reader)
+(export Evaluator)
+(export Layer)
