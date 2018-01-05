@@ -23,7 +23,7 @@
 
 (def-curried run-in (context string )
   (.run-in-context vm  string context
-                   (lit (file-name "kit"))))
+                   (lit (filename "kit"))))
 
 (require! (lit inspect) 'util
           'vm)
