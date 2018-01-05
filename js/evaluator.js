@@ -116,10 +116,11 @@ var {
   emit,
   bubble
  } = require("kit-events");
+var id = 0;
 var runIn = R.curry(((context, string) => {
 	
   return vm.runInContext(string, context, { 
-    filename:"kit",
+    filename:("kit" + ((id)++)),
     displayErrors:true
    });
 
@@ -129,7 +130,7 @@ var {
  } = require("util"),
     vm = require("vm");
 Object.copy = (function Object$copy$(o) {
-  /* Object.copy src/evaluator.sibilant:32:0 */
+  /* Object.copy src/evaluator.sibilant:33:0 */
 
   return mixin(o, {  });
 });

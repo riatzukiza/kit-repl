@@ -21,9 +21,10 @@
 
 
 
+(var id 0)
 (def-curried run-in (context string )
   (.run-in-context vm  string context
-                   (lit (filename "kit")
+                   (lit (filename ("kit" (incr id)))
                         (display-errors true))))
 
 (require! (lit inspect) 'util
