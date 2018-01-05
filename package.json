@@ -16,7 +16,7 @@
 	"devDependencies": {},
 	"scripts": {
 		"local": "sibilant -x cli.sibilant",
-		"compile": "sibilant ./src/repl.sibilant -o ./"
+		"compile": "sibilant ./src/*.sibilant -o ./js"
 	},
 	"repository": {
 		"type": "git",

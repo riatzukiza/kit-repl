@@ -135,3 +135,7 @@ var REPL = Layer.of([ Reader, Compiler, Evaluator ]).define("REPL", {
    }
  });
 exports.REPL = REPL;
+exports.Compiler = Compiler;
+exports.Reader = Reader;
+exports.Evaluator = Evaluator;
+exports.Layer = Layer;

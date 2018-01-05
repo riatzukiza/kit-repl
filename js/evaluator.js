@@ -118,29 +118,18 @@ var {
  } = require("kit-events");
 var runIn = R.curry(((context, string) => {
 	
-  return vm.runInContext(string, context);
+  return vm.runInContext(string, context, { 
+    filename:"kit",
+    displayErrors:true
+   });
 
 }));
 var { 
   inspect
  } = require("util"),
     vm = require("vm");
-var Console = Interface.define("Console", { 
-  init( evaluator = this.evaluator ){ 
-    
-      this.evaluator = evaluator;
-      return this;
-    
-   },
-  extend:console,
-  log( dots = params ){ 
-    
-      return this.evaluator.emit("message", [ "log", params.map(inspect).join(" ") ]);
-    
-   }
- });
 Object.copy = (function Object$copy$(o) {
-  /* Object.copy src/evaluator.sibilant:38:0 */
+  /* Object.copy src/evaluator.sibilant:32:0 */
 
   return mixin(o, {  });
 });
@@ -172,4 +161,3 @@ var Evaluator = Actor.define("Evaluator", {
    }
  });
 exports.Evaluator = Evaluator;
-// I am a taco
