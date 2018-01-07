@@ -134,7 +134,7 @@ Object.copy = (function Object$copy$(o) {
   return mixin(o, {  });
 });
 var Evaluator = Actor.define("Evaluator", { 
-  init( scope = global,context = vm.createContext(scope) ){ 
+  init( scope = Object.copy(global),context = vm.createContext(scope) ){ 
     
       this.scope = scope;this.context = context;
       Actor.init.call(this);
