@@ -120,8 +120,7 @@ var id = 0;
 var runIn = R.curry(((context, string) => {
 	
   return vm.runInContext(string, context, { 
-    filename:("kit" + ((id)++)),
-    displayErrors:true
+    filename:("kit" + ((id)++))
    });
 
 }));
