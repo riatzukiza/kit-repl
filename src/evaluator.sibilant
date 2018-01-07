@@ -34,7 +34,8 @@
 
 (define Evaluator Actor
 
-  (init ((context (vm.create-context (.copy Object global))))
+  (init ((scope global)
+         (context (vm.create-context scope)))
         (.call Actor.init this))
 
   (def-generic spawn () ((create this)))

@@ -1,6 +1,6 @@
 {
 	"name": "kit-repl",
-	"version": "1.3.2",
+	"version": "1.4.0",
 	"description": "A networked repl for an extension of sibilant I call kit.",
 	"main": "index.js",
 	"dependencies": {
