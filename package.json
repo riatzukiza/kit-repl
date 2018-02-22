@@ -7,9 +7,7 @@
 		"sibilant": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/sibilant",
 		"tree-kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/tree-kit",
 		"kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit",
-
 		"kit-actor": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-actor",
-
 		"kit-events": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-events",
 		"kit-interface": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-interface"
 	},

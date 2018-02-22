@@ -15,7 +15,7 @@
 (load "kit-interface/header")
 (import-namespace interface )
 
-(def scanning? (parser) (not (or parser.in-quote parser.comment)))
+(def scanning? (parser) (not (and parser.in-quote parser.comment)))
 
 (var readers
      (lit
