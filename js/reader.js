@@ -35,7 +35,7 @@ var {
 var scanning__QUERY = (function scanning__QUERY$(parser) {
   /* scanning? src/reader.sibilant:18:0 */
 
-  return !((parser.inQuote && parser.comment));
+  return !((parser.inQuote || parser.comment));
 });
 var readers = { 
   "\"":(function(c) {
@@ -64,6 +64,8 @@ readers["("] = (function(char) {
     if (scanning__QUERY(this)) {
       ((this.parens)++);
       return char;
+    } else {
+      return char;
     }
   }).call(this);
 });
@@ -73,6 +75,8 @@ readers[")"] = (function(char) {
   return (function() {
     if (scanning__QUERY(this)) {
       ((this.parens)--);
+      return char;
+    } else {
       return char;
     }
   }).call(this);
@@ -84,6 +88,8 @@ readers["["] = (function(char) {
     if (scanning__QUERY(this)) {
       ((this.squareBraces)++);
       return char;
+    } else {
+      return char;
     }
   }).call(this);
 });
@@ -93,6 +99,8 @@ readers["]"] = (function(char) {
   return (function() {
     if (scanning__QUERY(this)) {
       ((this.squareBraces)--);
+      return char;
+    } else {
       return char;
     }
   }).call(this);
@@ -104,6 +112,8 @@ readers["{"] = (function(char) {
     if (scanning__QUERY(this)) {
       ((this.curlyBraces)++);
       return char;
+    } else {
+      return char;
     }
   }).call(this);
 });
@@ -113,6 +123,8 @@ readers["}"] = (function(char) {
   return (function() {
     if (scanning__QUERY(this)) {
       ((this.curlyBraces)--);
+      return char;
+    } else {
       return char;
     }
   }).call(this);
