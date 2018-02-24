@@ -32,27 +32,22 @@ var {
   emit,
   bubble
  } = require("kit-events");
-var id = 0;
-var runIn = R.curry(((context, string) => {
-	
-  return vm.runInContext(string, context, { 
-    filename:("kit" + ((id)++))
-   });
-
-}));
 var { 
   inspect
  } = require("util"),
     vm = require("vm");
-Object.copy = (function Object$copy$(o) {
-  /* Object.copy src/evaluator.sibilant:33:0 */
+var id = 0;
+var runIn = R.curry(((string) => {
+	
+  return vm.runInThisContext(string, { 
+    filename:("kit" + ((id)++))
+   });
 
-  return mixin(o, {  });
-});
+}));
 var Evaluator = Actor.define("Evaluator", { 
-  init( scope = Object.copy(global),context = vm.createContext(scope) ){ 
+  init(  ){ 
     
-      this.scope = scope;this.context = context;
+      
       Actor.init.call(this);
       return this;
     
@@ -64,7 +59,7 @@ var Evaluator = Actor.define("Evaluator", {
    },
   _send( js = this.js,context = this.context ){ 
     
-      return Promise.resolve(js).then(runIn(context)).then(((result) => {
+      return Promise.resolve(js).then(runIn).then(((result) => {
       	
         return this.emit("message", [ "result", result ]);
       

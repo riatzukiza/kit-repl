@@ -1,12 +1,7 @@
-
-
 (namespace repl)
 
 (include "kit/header")
 (import-namespace kit)
-
-(include "../meta")
-(import-namespace meta)
 
 
 (include "kit-interface/header")
@@ -19,30 +14,25 @@
 (include "kit-events/header")
 (import-namespace events)
 
-
-
-(var id 0)
-(def-curried run-in (context string )
-  (.run-in-context vm  string context
-                   (lit (filename ("kit" (incr id)))
-                        )))
-
 (require! (lit inspect) 'util
           'vm)
 
-(def Object.copy (o) (mixin o {}))
+
+(var id 0)
+(def-curried run-in ( string )
+  (.run-in-this-context vm  string (lit (filename ("kit" (incr id))))))
+
+
 
 (define Evaluator Actor
 
-  (init ((scope (.copy Object global))
-         (context (vm.create-context scope)))
-        (.call Actor.init this))
+  (init () (.call Actor.init this))
 
   (def-generic spawn () ((create this)))
   (def-generic *send (js context)
 
     (pipe (Promise.resolve js)
-          (.then  (run-in context))
+          (.then  run-in)
           (.then (=> (result) (.emit this 'message ['result result])))
           (.catch (=> (err) (.emit this 'message ['error err]))))))
 

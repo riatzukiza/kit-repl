@@ -1,31 +1,32 @@
 {
-	"name": "kit-repl",
-	"version": "1.4.1",
-	"description": "A networked repl for an extension of sibilant I call kit.",
-	"main": "index.js",
-	"dependencies": {
-		"sibilant": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/sibilant",
-		"tree-kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/tree-kit",
-		"kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit",
-		"kit-actor": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-actor",
-		"kit-events": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-events",
-		"kit-interface": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-interface"
-	},
-	"devDependencies": {},
-	"scripts": {
-		"local": "sibilant -x cli.sibilant",
-		"compile": "sibilant ./src/*.sibilant -o ./js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+ssh://git@bitbucket.org/aaron_beavers/kit-repl.git"
-	},
-	"keywords": [
-		"cli",
-		"sibilant",
-		"lisp"
-	],
-	"author": "Aaron Beavers",
-	"license": "ISC",
-	"homepage": "https://bitbucket.org/aaron_beavers/kit-repl#readme"
+    "name": "kit-repl",
+    "version": "1.4.1",
+    "description": "A networked repl for an extension of sibilant I call kit.",
+    "main": "index.js",
+    "dependencies": {
+        "sibilant": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/sibilant",
+        "tree-kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/tree-kit",
+        "kit": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit",
+        "kit-actor": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-actor",
+        "kit-events": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-events",
+        "kit-interface": "git+ssh://riatzukiza@aaron.kettlelogic.space:1250/H/gits/kit-interface"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "local": "sibilant -x cli.sibilant",
+        "compile": "sibilant ./src/*.sibilant -o ./js",
+        "publish": "npm run compile;git add .;git commit -m 'new version published';git push github master;"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@bitbucket.org/aaron_beavers/kit-repl.git"
+    },
+    "keywords": [
+        "cli",
+        "sibilant",
+        "lisp"
+    ],
+    "author": "Aaron Beavers",
+    "license": "ISC",
+    "homepage": "https://bitbucket.org/aaron_beavers/kit-repl#readme"
 }
