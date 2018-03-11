@@ -25,7 +25,9 @@
     (pipe (Promise.resolve data)
           (.then (#-> .to-string sibilant (get  'js )))
           (.then (R.tap (emit 'message this)))
-          (.catch (emit 'error this))))
+          (.catch (=> (e)
+                      (.emit this 'error e)
+                      (throw e)))))
   (def-generic spawn ()
     ((create this))))
 

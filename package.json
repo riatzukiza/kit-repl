@@ -1,6 +1,6 @@
 {
     "name": "kit-repl",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "description": "A networked repl for an extension of sibilant I call kit.",
     "main": "index.js",
     "dependencies": {
@@ -13,7 +13,6 @@
     },
     "devDependencies": {},
     "scripts": {
-        "local": "sibilant -x cli.sibilant",
         "compile": "sibilant ./src/*.sibilant -o ./js",
         "publish": "npm run compile;git add .;git commit -m 'new version published';git push origin master;"
     },
