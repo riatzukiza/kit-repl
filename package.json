@@ -5,11 +5,11 @@
     "main": "index.js",
     "dependencies": {
         "sibilant": "*",
-        "tree-kit": "git@github.com:riatzukiza/tree-kit.git",
-        "kit": "git@github.com:riatzukiza/kit.git",
-        "kit-actor": "git@github.com:riatzukiza/kit-actor.git",
-        "kit-events": "git@github.com:riatzukiza/kit-events.git",
-        "kit-interface": "git@github.com:riatzukiza/kit-interface.git"
+        "tree-kit": "git+https://github.com/riatzukiza/tree-kit.git",
+        "kit": "git+https://github.com/riatzukiza/kit.git",
+        "kit-actor": "git+https://github.com/riatzukiza/kit-actor.git",
+        "kit-events": "git+https://github.com/riatzukiza/kit-events.git",
+        "kit-interface": "git+https://github.com/riatzukiza/kit-interface.git"
     },
     "devDependencies": {},
     "scripts": {
@@ -27,5 +27,5 @@
     ],
     "author": "Aaron Beavers",
     "license": "ISC",
-    "homepage": "https://bitbucket.org/aaron_beavers/kit-repl#readme"
+    "homepage": "git+https://bitbucket.org/aaron_beavers/kit-repl#readme"
 }
