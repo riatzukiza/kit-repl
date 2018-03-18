@@ -30,10 +30,14 @@
 
   (def-generic spawn () ((create this)))
   (def-generic *send (js context)
+    (print "evaluator?")
 
     (pipe (Promise.resolve js)
           (.then  run-in)
-          (.then (=> (result) (.emit this 'message ['result result])))
-          (.catch (=> (err) (.emit this 'message ['error err]))))))
+          (.then (=> (result) (.emit this 'message ['result result]))
+                 (print "YEEEE,we did it!")
+                 result)
+          (.catch (=> (err) (.emit this 'message ['error err])
+                      (throw err))))))
 
 (export Evaluator)
