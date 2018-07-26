@@ -22,9 +22,6 @@
         (.call Layer.init this)
         (.on this 'message (=> ([type value]) (.emit this type value)))))
 
-;; (define Server Interface
-;;   (init (port (listener (.s)))))
-
 (export REPL)
 (export Compiler)
 (export Reader)

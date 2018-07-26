@@ -1,5 +1,5 @@
 {
-    "name": "kit-repl",
+    "name": "@kit-js/repl",
     "version": "1.4.2",
     "description": "A networked repl for an extension of sibilant I call kit.",
     "main": "index.js",
