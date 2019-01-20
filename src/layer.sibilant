@@ -1,21 +1,20 @@
 (namespace repl)
 
-(include "kit/header")
+(include "@kit-js/core/header")
 (import-namespace kit)
 
 (include "../meta")
 
 (import-namespace meta)
 
-(include "kit-interface/header")
+
+(include "@kit-js/interface/header")
 
 (import-namespace interface )
 
-(include "kit-actor/header")
-(import-namespace actor)
-
-(include "kit-events/header")
-(import-namespace events)
+;; async should have actor in it, if it doesn't we're going to have to fix tht.
+(include "@kit-js/async/header")
+(import-namespace async)
 
 (var curry R.curry)
 

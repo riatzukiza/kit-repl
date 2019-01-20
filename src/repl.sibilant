@@ -1,13 +1,13 @@
 (namespace repl)
 
-(include "kit/header")
+(include "@kit-js/core/header")
 (import-namespace kit)
 
 (include "../meta")
 (import-namespace meta)
 
 (var curry R.curry)
-(load "kit-interface/header")
+(load "@kit-js/interface/header")
 (import-namespace interface)
 (require! (lit Compiler) "./compiler"
           (lit Reader) "./reader"

@@ -1,16 +1,3 @@
-
-
-(function(a, b, c) {
-  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
-
-  return foo(this);
-}).bind(this);
-
-
-
-
-
-;
 var R = require("ramda");
 var { 
   create,
@@ -19,33 +6,30 @@ var {
   conditional,
   cond,
   partiallyApplyAfter
- } = require("kit/js/util");
+ } = require("@kit-js/core/js/util");
 var { 
-  Actor,
-  sendTo
- } = require("kit-actor");
-var { 
-  EventEmitter,
-  emit,
-  bubble
- } = require("kit-events");
+  Actor
+ } = require("@kit-js/async/lib/actor"),
+    { 
+  EventEmitter
+ } = require("@kit-js/async/lib/event-emitter");
 var { 
   Interface
- } = require("kit-interface");
+ } = require("@kit-js/interface");
 var scanning__QUERY = (function scanning__QUERY$(parser) {
-  /* scanning? src/reader.sibilant:18:0 */
+  /* scanning? src/reader.sibilant:15:0 */
 
   return !((parser.inQuote || parser.comment));
 });
 var readers = { 
   "\"":(function(c) {
-    /* src/reader.sibilant:22:12 */
+    /* src/reader.sibilant:19:12 */
   
     this.inQuote = !(this.inQuote);
     return c;
   }),
   ";":(function(c) {
-    /* src/reader.sibilant:23:11 */
+    /* src/reader.sibilant:20:11 */
   
     return (function() {
       if (this.inQuote) {
@@ -58,7 +42,7 @@ var readers = {
   })
  };
 readers["("] = (function(char) {
-  /* src/reader.sibilant:29:13 */
+  /* src/reader.sibilant:26:13 */
 
   return (function() {
     if (scanning__QUERY(this)) {
@@ -70,7 +54,7 @@ readers["("] = (function(char) {
   }).call(this);
 });
 readers[")"] = (function(char) {
-  /* src/reader.sibilant:29:13 */
+  /* src/reader.sibilant:26:13 */
 
   return (function() {
     if (scanning__QUERY(this)) {
@@ -82,7 +66,7 @@ readers[")"] = (function(char) {
   }).call(this);
 });
 readers["["] = (function(char) {
-  /* src/reader.sibilant:29:13 */
+  /* src/reader.sibilant:26:13 */
 
   return (function() {
     if (scanning__QUERY(this)) {
@@ -94,7 +78,7 @@ readers["["] = (function(char) {
   }).call(this);
 });
 readers["]"] = (function(char) {
-  /* src/reader.sibilant:29:13 */
+  /* src/reader.sibilant:26:13 */
 
   return (function() {
     if (scanning__QUERY(this)) {
@@ -106,7 +90,7 @@ readers["]"] = (function(char) {
   }).call(this);
 });
 readers["{"] = (function(char) {
-  /* src/reader.sibilant:29:13 */
+  /* src/reader.sibilant:26:13 */
 
   return (function() {
     if (scanning__QUERY(this)) {
@@ -118,7 +102,7 @@ readers["{"] = (function(char) {
   }).call(this);
 });
 readers["}"] = (function(char) {
-  /* src/reader.sibilant:29:13 */
+  /* src/reader.sibilant:26:13 */
 
   return (function() {
     if (scanning__QUERY(this)) {
@@ -145,12 +129,12 @@ var Reader = Actor.define("Reader", {
           return this.parsers.get(compiler);
         } else {
           return (function(value) {
-            /* node_modules/kit/inc/scope.sibilant:12:9 */
+            /* node_modules/@kit-js/core/inc/scope.sibilant:12:9 */
           
             this.parsers.set(compiler, value);
             return value;
           })((function() {
-            /* node_modules/kit/inc/macros.sibilant:30:25 */
+            /* node_modules/@kit-js/core/inc/macros.sibilant:30:25 */
           
             return create(Parser)().start();
           }).call(this));

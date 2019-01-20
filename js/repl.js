@@ -1,16 +1,3 @@
-
-
-(function(a, b, c) {
-  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
-
-  return foo(this);
-}).bind(this);
-
-
-
-
-
-;
 var R = require("ramda");
 var { 
   create,
@@ -19,11 +6,11 @@ var {
   conditional,
   cond,
   partiallyApplyAfter
- } = require("kit/js/util");
+ } = require("@kit-js/core/js/util");
 var curry = R.curry;
 var { 
   Interface
- } = require("kit-interface");
+ } = require("@kit-js/interface");
 var { 
   Compiler
  } = require("./compiler"),

@@ -1,16 +1,3 @@
-
-
-(function(a, b, c) {
-  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
-
-  return foo(this);
-}).bind(this);
-
-
-
-
-
-;
 var R = require("ramda");
 var { 
   create,
@@ -19,22 +6,19 @@ var {
   conditional,
   cond,
   partiallyApplyAfter
- } = require("kit/js/util");
+ } = require("@kit-js/core/js/util");
 var { 
   Interface
- } = require("kit-interface");
+ } = require("@kit-js/interface");
 var { 
-  Actor,
-  sendTo
- } = require("kit-actor");
-var { 
-  EventEmitter,
-  emit,
-  bubble
- } = require("kit-events");
+  Actor
+ } = require("@kit-js/async/lib/actor"),
+    { 
+  EventEmitter
+ } = require("@kit-js/async/lib/event-emitter");
 var curry = R.curry;
 var assignHandlers = (function assignHandlers$(layer) {
-  /* assign-handlers src/layer.sibilant:25:0 */
+  /* assign-handlers src/layer.sibilant:21:0 */
 
   
 });

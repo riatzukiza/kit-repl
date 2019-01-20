@@ -1,18 +1,15 @@
 (namespace repl)
 
-(include "kit/header")
+(include "@kit-js/core/header")
 (import-namespace kit)
 
 (include "../meta")
 (import-namespace meta)
 
+(load "@kit-js/async/header")
+(import-namespace asyn)
 
-
-(load "kit-actor/header")
-
-(load "kit-events/header")
-
-(load "kit-interface/header")
+(load "@kit-js/interface/header")
 (import-namespace interface )
 
 (def scanning? (parser) (not (or parser.in-quote parser.comment)))

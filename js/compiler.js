@@ -1,16 +1,3 @@
-
-
-(function(a, b, c) {
-  /* node_modules/kit/inc/core/defs.sibilant:53:9 */
-
-  return foo(this);
-}).bind(this);
-
-
-
-
-
-;
 var R = require("ramda");
 var { 
   create,
@@ -19,19 +6,16 @@ var {
   conditional,
   cond,
   partiallyApplyAfter
- } = require("kit/js/util");
+ } = require("@kit-js/core/js/util");
 var { 
   Interface
- } = require("kit-interface");
+ } = require("@kit-js/interface");
 var { 
-  Actor,
-  sendTo
- } = require("kit-actor");
-var { 
-  EventEmitter,
-  emit,
-  bubble
- } = require("kit-events");
+  Actor
+ } = require("@kit-js/async/lib/actor"),
+    { 
+  EventEmitter
+ } = require("@kit-js/async/lib/event-emitter");
 var sibilant = require("sibilant");
 var Compiler = Actor.define("Compiler", { 
   init(  ){ 
@@ -44,10 +28,15 @@ var Compiler = Actor.define("Compiler", {
   _send( data = this.data ){ 
     
       return Promise.resolve(data).then((function() {
-        /* src/compiler.sibilant:26:17 */
+        /* src/compiler.sibilant:23:17 */
       
         return sibilant(arguments[0].toString()).js;
-      })).then(R.tap(emit("message", this))).catch(emit("error", this));
+      })).then(R.tap(emit("message", this))).catch(((e) => {
+      	
+        this.emit("error", e);
+        throw e
+      
+      }));
     
    },
   spawn(  ){ 
