@@ -18,9 +18,9 @@
      (inject context input restructurers)
 
      (unless (= 1 (length context.parse-stack))
-             (var unclosed-node (|> context.parse-stack first))
+             (var unclosed-node (pipe context.parse-stack first))
              (throw (new Error ("unclosed node at " unclosed-node.file":"unclosed-node.line":"unclosed-node.col"\n  "
-                                (|> unclosed-node
+                                (pipe unclosed-node
                                     (prettify false)
                                     (.slice 0 100))))))
 
@@ -30,7 +30,6 @@
      (var restructurer (or (get restructurers node.type)
                            restructurers.default))
      (restructurer node context))
-     
 (set sibilant 'restructure restructure)
 
 (def restructurers.head (node context)
@@ -39,10 +38,9 @@
           expression (merge-with node { token "("
                                         type 'open-expression }))
 
-     (|> context
+     (pipe context
          (restructurers expression)
          (restructurers head)))
-                                        
 
 (def restructurers.open-expression (node context)
      (var first (first context.parse-stack))

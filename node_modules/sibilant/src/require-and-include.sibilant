@@ -1,5 +1,5 @@
 (def sibilize (input)
-     (var result (|> input
+     (var result (pipe input
                      parse
                      restructure
                      transpile
@@ -38,7 +38,7 @@
 (set sibilant 'source-cache {})
 
 (def sibilant.sibilize-file (file-name)
-     (|> file-name
+     (pipe file-name
          sibilant.transpile-file
          output-formatter))
 

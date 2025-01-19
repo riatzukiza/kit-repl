@@ -9,6 +9,8 @@
      'dir (process.cwd)
      'dependencies {})
 
+(add-to-module-lookup (process.cwd))
+
 (def sibilant.relative-dir-and-file (file-name)
      (|> [ (path.dirname file-name) file-name ]
          (.map (#> (path.relative (process.cwd) #0)))))

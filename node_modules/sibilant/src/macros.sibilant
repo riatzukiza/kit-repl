@@ -15,3 +15,15 @@
  "./macros/switch"
  "./macros/variables"
  )
+(macro add-to-module-lookup (path)
+       `(scoped (require! 'path)
+                (var p "/"
+                     inc @(or path (process.cwd)))
+                (assign module.paths [
+                        ...module.paths
+                        ...(.map (.split inc path.sep)
+                                 (lambda (el)
+                                   (var r (path.join p "node_modules"))
+                                   (assign p (path.join p el)) r))
+                        (path.join inc "node_modules")
+                        ])))

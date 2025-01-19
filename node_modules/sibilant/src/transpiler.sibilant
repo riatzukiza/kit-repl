@@ -80,7 +80,7 @@
      node)
 
 (def transpile.number (node)
-     (|> (replace-all node.token "," "")
+     (pipe (replace-all node.token "," "")
          parse-float
          .to-string))
 
@@ -116,7 +116,7 @@
 
               (node? head 'literal 'other-char)
               (do
-               (|> head
+               (pipe head
                    transpile
                    output-formatter
                    sibilant.resolve-macro
@@ -137,7 +137,7 @@
 (def transpile.brace (node) (apply sibilant.macros.namespaces.core.hash node.contents))
 
 (def transpile.literal (node)
-     (var string (|> node.token (replace-all "\\*" "_"))
+     (var string (pipe node.token (replace-all "\\*" "_"))
           last-char (last string))
 
      (assign string (if (= last-char "?") (concat (string.slice 0 -1) "__QUERY")
@@ -153,7 +153,7 @@
                                                 (.to-upper-case letter))))))
 
 (def transpile.string (node)
-     (|> node.token
+     (pipe node.token
          (.split "\n")
          (.join "\\n\" +\n\"")))
 

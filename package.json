@@ -1,6 +1,6 @@
 {
     "name": "@kit-js/repl",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "description": "A networked repl for an extension of sibilant I call kit.",
     "main": "index.js",
     "dependencies": {
@@ -8,7 +8,7 @@
         "@kit-js/collections": "^1.0.3",
         "@kit-js/core": "^1.3.1",
         "@kit-js/interface": "^2.0.4",
-        "sibilant": "git+https://bitbucket.org/kettlelogic/sibilant.git"
+        "sibilant": "git+https://github.com/riatzukiza/lithp.git"
     },
     "devDependencies": {},
     "scripts": {

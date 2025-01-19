@@ -111,9 +111,7 @@ the result is inserted directly into the code, not as a string. Often you will w
          (node? content 'brace)
          (^hash ...(map content.contents ^quote))
 
-         (do
-          (console.log ("unknown content" (inspect content)))
-          content)))
+         ))
 
 (macro docs (...options)
      (var options-string undefined

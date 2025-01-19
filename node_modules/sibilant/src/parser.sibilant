@@ -54,7 +54,6 @@
      (var match true
           regex-name null
           remaining-input string)
-     
      (while match
             (detect ordered-regexes
                     (#(r)
@@ -65,7 +64,6 @@
             (when (exists? match)
                   (var match-string (first match)
                        length (length match-string))
-                  
                   (context.stack.push
                    { file sibilant.file
                      token match-string
